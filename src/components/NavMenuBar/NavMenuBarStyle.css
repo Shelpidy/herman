@@ -1,0 +1,98 @@
+.bars-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: all 0.25s ease-in-out;
+  cursor: pointer;
+}
+
+.bars-wrapper.open {
+  transform: translateY(6px);
+  transition: all 0.5s;
+}
+
+.animate {
+  animation-name: anim1;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+  animation-delay: 0.75s;
+  animation-direction: alternate;
+  -webkit-animation-name: anim1;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 0.75s;
+  -webkit-animation-direction: alternate;
+}
+
+.bar1,
+.bar2,
+.bar3 {
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  top: 0;
+  left: 0;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+
+.bar2 {
+  transform: translateY(7px);
+  transition: all 0.5s;
+}
+.bar3 {
+  transform: translateY(14px);
+  transition: all 0.5s;
+}
+.open .bar1 {
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+.open .bar2 {
+  display: none;
+}
+
+.open .bar3 {
+  transform: rotate(-45deg);
+}
+
+.menu-bar {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  z-index: 100;
+  top: 8%;
+  left: 5%;
+  right: 5%;
+  transition: all 0.5s;
+  background-color: white;
+}
+
+.menu-bar > * {
+  display: block;
+  margin: 4px;
+}
+@-webkit-keyframes anim1 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes anim1 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
