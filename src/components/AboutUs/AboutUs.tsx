@@ -12,7 +12,6 @@ import "./AboutUs.css";
 // import "aos/dist/aos.css";
 
 function AboutUs() {
-  const [activeTab, setActiveTab] = React.useState<number>(0);
   const mytheme = useTheme();
   const lessThanTab = useMediaQuery(mytheme.breakpoints.down("md"));
 

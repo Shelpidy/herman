@@ -25,7 +25,6 @@ function Header({ setThemeMode }: HeaderProps) {
   const [isLogin, setIsLogin] = React.useState<boolean>(true);
   const theme = useTheme();
   const lessThanTab = useMediaQuery(theme.breakpoints.down("md"));
-  const imgWidth = lessThanTab ? "10vw" : "4vw";
   return (
     <AppBar
       elevation={0}

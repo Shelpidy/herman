@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "primereact/button";
+import { useState, useEffect } from "react";
 import { Galleria } from "primereact/galleria";
 import "primereact/galleria/galleria.min.css";
 import { Box } from "@mui/material";
@@ -12,20 +11,6 @@ export default function ImagesGallery({ galleryImages }: ImagesGalleryProps) {
   const [images, setImages] = useState<Gallery[] | []>([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const responsiveOptions = [
-    {
-      breakpoint: "991px",
-      numVisible: 4,
-    },
-    {
-      breakpoint: "767px",
-      numVisible: 3,
-    },
-    {
-      breakpoint: "575px",
-      numVisible: 1,
-    },
-  ];
 
   useEffect(() => {
     setImages(galleryImages);

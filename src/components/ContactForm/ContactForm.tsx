@@ -1,22 +1,14 @@
-import React, { useEffect } from "react";
-import {
-  Button,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-  Modal,
-} from "@mui/material";
-import { useReducer } from "react";
-import { ContactFormObject, Action, EmailVerifyResp } from "./ContactForm.d";
 import {
   MailOutline,
-  SmartphoneOutlined,
   PlaceOutlined,
-  Close,
-  Send,
+  SmartphoneOutlined
 } from "@mui/icons-material";
+import {
+  Typography
+} from "@mui/material";
+import React, { useReducer } from "react";
 import Swal from "sweetalert2";
+import { Action, ContactFormObject } from "./ContactForm.d";
 
 const Toast = Swal.mixin({
   timer: 5000,
@@ -47,11 +39,6 @@ const reducer = (state: ContactFormObject = initialState, action: Action) => {
   }
 };
 
-const transport = {
-  host: "smtp.mail.yahoo.com",
-  secure: true,
-  auth: { user: "teax.sl@yahoo.com", pass: "amhg ycxx unqf plrf" },
-};
 
 export const ContactEmail = (mailObj: ContactFormObject) => ({
   subject: `👋 ${mailObj.subject}`,
