@@ -11,7 +11,6 @@ export default function ImagesGallery({ galleryImages }: ImagesGalleryProps) {
   const [images, setImages] = useState<Gallery[] | []>([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-
   useEffect(() => {
     setImages(galleryImages);
   }, [galleryImages]);

@@ -74,14 +74,14 @@ function Banner() {
           className="text-2xl font-bold font-poppinsMedium md:text-5xl"
           color="white"
         >
-          Augustine Sorie-sengbe Marrah
+          Embark on Unforgettable Journeys with Our Stories
         </motion.h1>
         <motion.p
           style={{ color: mytheme.palette.primary.light }}
           variants={bannerTextVariant}
-          className="my-2 text-xl font-poppinsLight"
+          className="my-2 text-xl font-poppinsMedium"
         >
-          Everyone needs a lawyer
+          Dive into a World of Imagination and Emotion
         </motion.p>
       </motion.div>
       <img

@@ -42,44 +42,29 @@ function Header({ setThemeMode }: HeaderProps) {
       >
         <Box>
           <Typography variant="h6" fontWeight="blod">
-            Marah
+            Herman Story
           </Typography>
         </Box>
 
         {!lessThanTab && (
-          <Tabs
-            centered
-            className="md:hidden"
-            value={activeTab}
-            onChange={(e, value) => setActiveTab(value)}
-            indicatorColor="primary"
-          >
-            <Tab
-              sx={{ color: theme.palette.primary.light }}
-              href="#"
-              label="Home"
-            ></Tab>
-            <Tab
-              sx={{ color: theme.palette.primary.light }}
-              href="#about"
-              label="About"
-            ></Tab>
-            <Tab
-              sx={{ color: theme.palette.primary.light }}
-              href="#blogs"
-              label="Blogs"
-            ></Tab>
-            <Tab
-              sx={{ color: theme.palette.primary.light }}
-              href="#gallery"
-              label="Gallery"
-            ></Tab>
-            <Tab
-              sx={{ color: theme.palette.primary.light }}
-              href="#contact"
-              label="Contact"
-            ></Tab>
-          </Tabs>
+          <Box>
+            <Link
+              color="primary.light"
+              style={{ textDecoration: "none" }}
+              className="px-5 py-2 rounded"
+              href="/"
+            >
+              Home
+            </Link>
+            <Link
+              color="primary.light"
+              style={{ textDecoration: "none" }}
+              className="px-5 py-2 rounded"
+              href="/stories"
+            >
+              Audio Stories
+            </Link>
+          </Box>
         )}
 
         {!lessThanTab && (
@@ -95,12 +80,32 @@ function Header({ setThemeMode }: HeaderProps) {
               <Link
                 color="primary.light"
                 style={{ textDecoration: "none" }}
-                className="px-10 py-2 rounded"
+                className="px-2 py-2 rounded"
                 href="/signout"
               >
                 Signout
               </Link>
             )}
+            {!isLogin && (
+              <Link
+                color="primary.light"
+                style={{ textDecoration: "none" }}
+                className="px-5 py-2 rounded"
+                href="/signin"
+              >
+                Signin
+              </Link>
+            )}
+
+            <Link
+              color="primary.light"
+              style={{ textDecoration: "none" }}
+              className="px-5 py-2 rounded"
+              href="/signup"
+            >
+              Signup
+            </Link>
+
             <IconButton
               onClick={setThemeMode}
               sx={{ color: theme.palette.primary.light }}

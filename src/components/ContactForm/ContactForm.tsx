@@ -1,11 +1,9 @@
 import {
   MailOutline,
   PlaceOutlined,
-  SmartphoneOutlined
+  SmartphoneOutlined,
 } from "@mui/icons-material";
-import {
-  Typography
-} from "@mui/material";
+import { Typography } from "@mui/material";
 import React, { useReducer } from "react";
 import Swal from "sweetalert2";
 import { Action, ContactFormObject } from "./ContactForm.d";
@@ -38,7 +36,6 @@ const reducer = (state: ContactFormObject = initialState, action: Action) => {
       return state;
   }
 };
-
 
 export const ContactEmail = (mailObj: ContactFormObject) => ({
   subject: `👋 ${mailObj.subject}`,

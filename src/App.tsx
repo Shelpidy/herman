@@ -5,13 +5,19 @@ import { createTheme } from "@mui/material/styles";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
-import BlogPage from "./pages/Blog";
-import { Dashboard } from "@mui/icons-material";
+import StoryPage from "./pages/Story";
 // import "primereact/primereact.all";
 import { useMediaQuery } from "@mui/material";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AOS from "aos";
+import SignUpPage from "./pages/SignUp";
+import { CookiesProvider } from "react-cookie";
+import DashboardPage from "./pages/Dashboard";
+import ProfilePage from "./pages/Profile";
+import UserAudioProfilePage from "./pages/UserAudioProfile";
+
+// Import the functions you need from the SDKs you need
 
 type Mode = "dark" | "light";
 
@@ -34,38 +40,43 @@ function App() {
         palette: {
           mode: themeMode === "dark" ? "dark" : "light",
           primary: {
-            main: themeMode === "dark" ? "#6da5c0" : "#05161a",
-            light: themeMode === "light" ? "#6da5c0" : "#05161a",
+            main: themeMode === "dark" ? "#49a078" : "#1f3421",
+            light: themeMode === "light" ? "#49a078" : "#1f3421",
           },
           secondary: {
-            main: themeMode === "dark" ? "#0f969c" : "#072e33",
+            main: "#9cc5a1",
           },
         },
         typography: {
-          fontFamily: ["Poppins-Medium", "Poppins-Light", "Inter"].join(","),
+          fontFamily: ["Poppins-Light", "Poppins-Medium", "Inter"].join(","),
         },
       }),
     [themeMode],
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <Header
-        setThemeMode={() =>
-          setThemeMode(themeMode == "light" ? "dark" : "light")
-        }
-      />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" Component={HomePage} />
-          <Route path="/blog/:blogId" Component={BlogPage} />
-          <Route path="/signin" Component={SignInPage} />
-          <Route path="/dashboard" Component={Dashboard} />
-          <Route path="*" Component={NotFoundPage} />
-        </Routes>
-      </BrowserRouter>
-      <Footer />
-    </ThemeProvider>
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <ThemeProvider theme={theme}>
+        <Header
+          setThemeMode={() =>
+            setThemeMode(themeMode == "light" ? "dark" : "light")
+          }
+        />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" Component={HomePage} />
+            <Route path="/stories" Component={StoryPage} />
+            <Route path="/profile" Component={ProfilePage} />
+            <Route path="/user/:userId" Component={UserAudioProfilePage} />
+            <Route path="/signin" Component={SignInPage} />
+            <Route path="/signup" Component={SignUpPage} />
+            <Route path="/dashboard" Component={DashboardPage} />
+            <Route path="*" Component={NotFoundPage} />
+          </Routes>
+        </BrowserRouter>
+        <Footer />
+      </ThemeProvider>
+    </CookiesProvider>
   );
 }
 

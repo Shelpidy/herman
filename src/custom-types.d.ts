@@ -1,45 +1,48 @@
-declare type Blog = {
+declare interface User {
   id: string;
-  content: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  profileImage?: string;
+  contactNumber: string;
+  gender: "male" | "female" | "other";
+  dateOfBirth: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  address?: string;
+  region?: string;
+  password: string;
+  email: string;
+  role: "admin" | "user";
+  createdAt?: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  updatedAt?: {
+    seconds: number;
+    nanoseconds: number;
+  };
+}
+
+declare type Audio = {
+  id: string;
   title: string;
   url: string;
-  imageURL?: string;
-  videoURL?: string;
+  recorder: { id: string; fullName: string; profileImage: string };
   numberOfLikes: number | string;
-};
-
-declare type Admin = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-};
-
-declare type About = {
-  id: string;
-  content: string;
-  imageURL: string;
+  userId: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 };
 
 declare type Gallery = {
-  id: string;
+  fileId: string;
   imageURL?: string;
   videoURL?: string;
   caption: string;
-};
-
-declare type Contact = {
-  emails?: string[];
-  phones?: string[];
-  address?: string;
-};
-
-declare type SocialMedia = {
-  facebook?: string;
-  instgram?: string;
-  twitter?: string;
-  medium?: string;
-  linkedin?: string;
 };
 
 declare type GalleryImage = {

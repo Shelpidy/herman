@@ -1,4 +1,4 @@
-import { Avatar, IconButton,useTheme } from "@mui/material";
+import { Avatar, IconButton, useTheme } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { DarkMode, LightMode } from "@mui/icons-material";
@@ -79,9 +79,9 @@ function NavMenuBar({ setThemeMode }: NavMenuBarProps) {
               onClick={() => setOpen(false)}
               style={{ textDecoration: "none" }}
               className="hover:bg-customPrimary10 px-10 py-2 rounded hover:text-gray-300"
-              href="/#blogs"
+              href="/#services"
             >
-              Blogs
+              Services
             </a>
             <a
               onClick={() => setOpen(false)}
@@ -90,6 +90,14 @@ function NavMenuBar({ setThemeMode }: NavMenuBarProps) {
               href="/#gallery"
             >
               Gallery
+            </a>
+            <a
+              onClick={() => setOpen(false)}
+              style={{ textDecoration: "none" }}
+              className="hover:bg-customPrimary10 px-10 py-2 rounded hover:text-gray-300"
+              href="/#stories"
+            >
+              Stories
             </a>
             <a
               onClick={() => setOpen(false)}
@@ -110,17 +118,14 @@ function NavMenuBar({ setThemeMode }: NavMenuBarProps) {
               </a>
             )}
 
-            {isLogin && (
-              <a
-                onClick={() => setOpen(false)}
-                style={{ textDecoration: "none" }}
-                className="hover:bg-customPrimary10 px-10 py-2 rounded hover:text-gray-300"
-                href="/dashboard"
-              >
-                <Avatar src="User" sx={{ width: 25, height: 25 }} />
-              </a>
-            )}
-
+            <a
+              onClick={() => setOpen(false)}
+              style={{ textDecoration: "none" }}
+              className="hover:bg-customPrimary10 px-10 py-2 rounded hover:text-gray-300"
+              href="/signup"
+            >
+              Signup
+            </a>
             {!isLogin && (
               <a
                 onClick={() => setOpen(false)}
@@ -129,6 +134,17 @@ function NavMenuBar({ setThemeMode }: NavMenuBarProps) {
                 href="/signin"
               >
                 Signin
+              </a>
+            )}
+
+            {isLogin && (
+              <a
+                onClick={() => setOpen(false)}
+                style={{ textDecoration: "none" }}
+                className="hover:bg-customPrimary10 px-10 py-2 rounded hover:text-gray-300"
+                href="/dashboard"
+              >
+                <Avatar src="User" sx={{ width: 25, height: 25 }} />
               </a>
             )}
 
