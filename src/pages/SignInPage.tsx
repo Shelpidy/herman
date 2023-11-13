@@ -14,7 +14,39 @@ import {
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { LoadingButton } from "@mui/lab";
-import { LocalDiningSharp } from "@mui/icons-material";
+import jwt_encode from "jwt-encode";
+import {
+  collection,
+  doc,
+  getFirestore,
+  getDocs,
+  setDoc,
+  query,
+  onSnapshot,
+  where,
+  limit,
+  addDoc,
+} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import uploadFileToFirebase from "../utils/utils";
+import { useNavigate } from "react-router-dom";
+import { AddAPhotoOutlined } from "@mui/icons-material";
+const firebaseConfig = {
+  apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
+  authDomain: "herman-98ed4.firebaseapp.com",
+  projectId: "herman-98ed4",
+  storageBucket: "herman-98ed4.appspot.com",
+  messagingSenderId: "290673052798",
+  appId: "1:290673052798:web:ab0598cc200626b3d91c2f",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+const firestore = getFirestore();
+
+const userCollection = collection(firestore,"users")
+
 const Toast = Swal.mixin({
   toast: true,
   position: "center",
@@ -22,11 +54,6 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
   showConfirmButton: false,
 });
-
-export const metadata = {
-  title: "SLMS | Signin",
-  description: "Digital Learning Platform",
-};
 
 const SignInPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -36,6 +63,7 @@ const SignInPage: React.FC = () => {
   const [cookie, setCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
+  const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,50 +73,61 @@ const SignInPage: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = async () => {
-    setLoading(true);
-    try {
-      console.log(formData);
-      // let reponse = await fetch("/api/auth/signin/", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(formData),
-      // });
-      // let data = await reponse.json();
-      // if (reponse.status === 201) {
-      //   setCookie("token", String(data.token));
 
-      // } else {
-      //   Toast.fire({
-      //     icon: "error",
-      //     iconColor: "red",
-      //     text: data.message,
-      //   });
-      // }
-      // setLoading(false);
-    } catch (error) {
-      console.log({ error });
-      Toast.fire({
-        icon: "error",
-        iconColor: "red",
-        text: "Login failed. Check your connection and try gain",
-      });
-      setLoading(false);
+ async function handleFormSubmit() {
+      try {
+        setLoading(true)
+        let _users: User[] = [];
+        let usersQuery = query(userCollection,where("email","==",formData.email));
+        let usersSnapshot = await getDocs(usersQuery);
+        usersSnapshot.forEach((snap) => {
+          console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
+          let user = {
+            id: snap.id,
+            ...JSON.parse(JSON.stringify(snap.data())),
+          };
+          _users.push(user);
+        });
+
+        console.log({Users:_users})
+        if(_users.length < 1){
+          Toast.fire({
+            text:"Email does not exist",
+            icon:"warning"
+          })
+
+        }else{
+          let _user = _users[0]
+          if(_user.password === formData.password){
+            let data = {
+              id:_user.id,
+              fullName:_user.firstName +" "+ _user.middleName + " "+_user.lastName,
+              profileImage:_user.profileImage,
+              role:_user.role
+            }
+            let encodedData = jwt_encode(data,'herman')
+            console.log({token:encodedData})
+            setCookie("token", String(encodedData));
+            // navigate("/")
+            window.location.assign("/")
+          }else{
+            Toast.fire({
+              text:"Password in incorrect",
+              icon:"warning"
+            })
+          }
+        }
+        
+      } catch (err) {
+        console.log(err);
+        Toast.fire({
+          text:"login fail. Check your internet connection",
+          icon:"warning"
+        })
+      }finally{
+        setLoading(false)
+      }
     }
-    // Perform sign-in logic here
-    // Make a fetch request to long
-    // Set the returned token to cookie
-  };
-
-  const handleSignInWithGoogle = () => {
-    // Implement sign-in with Google logic
-    console.log("Signing in with Google");
-  };
-
-  const handleSignInWithFacebook = () => {
-    // Implement sign-in with Facebook logic
-    console.log("Signing in with Facebook");
-  };
 
   return (
     <Container
@@ -104,7 +143,7 @@ const SignInPage: React.FC = () => {
         sx={{
           maxWidth: "400px",
           padding: "25px",
-          minHeight: "45vh",
+          // minHeight: "45vh",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -115,8 +154,10 @@ const SignInPage: React.FC = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          mb="10px"
-        ></Box>
+          // mb="10px"
+        >
+          <Typography m='15px' variant="h6" fontFamily="Poppins-Light">Signin</Typography>
+        </Box>
         <TextField
           size="small"
           required
@@ -143,7 +184,7 @@ const SignInPage: React.FC = () => {
           loading={loading}
           disabled={loading}
           color="primary"
-          size="medium"
+          size="small"
           onClick={handleFormSubmit}
         >
           Sign In

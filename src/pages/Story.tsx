@@ -10,64 +10,37 @@ import {
   Container,
   CircularProgress,
   Box,
-  Button,
+  TextField,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { useNavigate } from "react-router-dom";
-import ReactAudioPlayer from "react-audio-player";
-import {
-  collection,
-  doc,
-  getFirestore,
-  getDocs,
-  setDoc,
-  query,
-  onSnapshot,
-  where,
-  limit,
-} from "firebase/firestore";
-import Swal from "sweetalert2";
-
+import { Search as SearchIcon } from "@mui/icons-material";
+import { getDocs, query, collection, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import { Favorite } from "@mui/icons-material";
 import { UserAudio } from "../components/UserAudioComponent";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
-  authDomain: "herman-98ed4.firebaseapp.com",
-  projectId: "herman-98ed4",
-  storageBucket: "herman-98ed4.appspot.com",
-  messagingSenderId: "290673052798",
-  appId: "1:290673052798:web:ab0598cc200626b3d91c2f",
+  // Your Firebase config
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-interface AdminUserTableProps {
-  users: User[];
-}
+// const app = initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
-
 const audioCollection = collection(firestore, "audios");
-let audioQuery = query(audioCollection);
+const audioQuery = query(audioCollection);
 
 const StoryPage: React.FC = () => {
   const [audios, setAudios] = useState<Audio[] | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     async function getAudios() {
       try {
         let _audios: Audio[] = [];
-        let audiosSnapshot = await getDocs(audioQuery);
+        const audiosSnapshot = await getDocs(audioQuery);
         audiosSnapshot.forEach((snap) => {
           console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
-          let audio = {
+          const audio = {
             id: snap.id,
             ...JSON.parse(JSON.stringify(snap.data())),
           };
@@ -81,7 +54,17 @@ const StoryPage: React.FC = () => {
     getAudios();
   }, []);
 
-  if (!audios) {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredAudios = audios
+    ? audios.filter((audio) =>
+        audio.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : null;
+
+  if (!filteredAudios) {
     return (
       <Box
         sx={{
@@ -101,10 +84,33 @@ const StoryPage: React.FC = () => {
       </Box>
     );
   }
+
   return (
-    <Container maxWidth="lg" style={{ marginTop: "13vh", marginBottom: "5vh" }}>
+    <Container
+      maxWidth="lg"
+      style={{ marginTop: "13vh", marginBottom: "5vh" }}
+    >
+      <Box  sx={{marginY:'4vh',display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
+      <Typography fontFamily="Poppins-Medium" variant="h5">Audio Stories</Typography>
+      <TextField
+        label="Search"
+        variant="outlined"
+        size="small"
+  
+        value={searchTerm}
+        onChange={handleSearchChange}
+        InputProps={{
+          endAdornment: (
+            <IconButton onClick={() => setSearchTerm('')} edge="end">
+              <SearchIcon />
+            </IconButton>
+          ),
+        }}
+      />
+      </Box>
+      
       <Grid container spacing={2}>
-        {audios.map((audio) => {
+        {filteredAudios.map((audio) => {
           if (audio.recorder) {
             return (
               <Grid item key={audio.id} xs={12} sm={6} md={4} lg={3}>

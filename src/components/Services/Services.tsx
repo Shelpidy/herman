@@ -7,14 +7,14 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Container, Grid } from "@mui/material";
 
-type CourseProps = {
+type ServiceProps = {
   id: number;
   title: string;
   description: string;
   imageUrl: string;
 };
 
-function ServicesComponent({ title, description, imageUrl }: CourseProps) {
+function ServicesComponent({ title, description, imageUrl }: ServiceProps) {
   React.useEffect(() => {
     AOS.init({ duration: 2000 });
   }, []);
@@ -40,24 +40,30 @@ function ServicesComponent({ title, description, imageUrl }: CourseProps) {
 }
 
 function ServicesSection() {
-  const Courses: CourseProps[] = [
+  const Services: ServiceProps[] = [
     {
       id: 1,
       imageUrl: "/service.png",
       title: "Story Telling",
       description: `Step into the realm of community well-being and disease prevention. Our Public Health Certificate equips you with the knowledge to assess health challenges, design effective interventions, and advocate for healthier societies. Dive into epidemiology, health policies, and health promotion strategies, positioning yourself as a force for positive change.`,
     },
-  ];
+    {
+      id: 2,
+      imageUrl: "/record2.png",
+      title: "Audio Book",
+      description: `Step into the realm of community well-being and disease prevention. Our Public Health Certificate equips you with the knowledge to assess health challenges, design effective interventions, and advocate for healthier societies. Dive into epidemiology, health policies, and health promotion strategies, positioning yourself as a force for positive change.`,
+    },
+  ]
 
   return (
     <Container maxWidth="lg" style={{ marginTop: "40px" }}>
       <Grid container spacing={2}>
-        {Courses.map((item: CourseProps, index: number) => {
+        {Services.map((item: ServiceProps, index: number) => {
           return (
             <Grid item key={item.id} xs={12} sm={12} md={6} lg={6}>
-              <ServicesComponent {...item} />;
+              <ServicesComponent {...item} />
             </Grid>
-          );
+          )
         })}
       </Grid>
     </Container>

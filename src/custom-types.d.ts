@@ -25,6 +25,13 @@ declare interface User {
   };
 }
 
+declare type CurrentUser = {
+  id: string | number;
+  fullName: string;
+  profileImage: string;
+  role: "admin" | "user";
+};
+
 declare type Audio = {
   id: string;
   title: string;

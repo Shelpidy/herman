@@ -133,6 +133,7 @@ const SignUpPage = () => {
         ...userData,
         profileImage: profileImage,
         dateOfBirth: new Date(formData.dateOfBirth),
+        role:"user"
       };
       console.log({ userObj });
       let snapShot = await addDoc(userCollection, userObj);
@@ -220,20 +221,32 @@ const SignUpPage = () => {
         justifyContent: "center",
         alignItems: "center",
         marginTop: "14vh",
+        flexDirection:"row",
         marginBottom: "5vh",
       }}
     >
+      
       <Card sx={{ padding: "25px", maxWidth: "800px", marginBottom: "15px" }}>
+         <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          // mb="10px"
+        >
+          <Typography m='15px' variant="h6" fontFamily="Poppins-Light">Signup</Typography>
+        </Box>
         <Card
           className="hide-scrollbar"
           variant="outlined"
           sx={{ width: "100%" }}
         >
+       
           <Box>
             {image && (
-              <Card
+              <Box
                 key={image}
-                variant="outlined"
                 sx={{
                   position: "relative",
                   width: "100%",
@@ -247,7 +260,7 @@ const SignUpPage = () => {
                   image={image}
                   alt="Profile Image"
                 />
-              </Card>
+              </Box>
             )}
             <label
               style={{
@@ -491,6 +504,7 @@ const SignUpPage = () => {
           color="primary"
           variant="contained"
           loading={loading}
+          size="small"
           disabled={loading}
           onClick={handleFormSubmit}
         >

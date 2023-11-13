@@ -10,6 +10,48 @@ import {
   Typography,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import Swal from "sweetalert2";
+import {
+  collection,
+  doc,
+  getFirestore,
+  getDocs,
+  setDoc,
+  query,
+  onSnapshot,
+  where,
+  limit,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { useNavigate } from "react-router-dom";
+import { AddAPhotoOutlined } from "@mui/icons-material";
+import { useCurrentUser } from "../../hooks/customHooks";
+const firebaseConfig = {
+  apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
+  authDomain: "herman-98ed4.firebaseapp.com",
+  projectId: "herman-98ed4",
+  storageBucket: "herman-98ed4.appspot.com",
+  messagingSenderId: "290673052798",
+  appId: "1:290673052798:web:ab0598cc200626b3d91c2f",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+const firestore = getFirestore();
+
+const userCollection = collection(firestore,"users")
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "center",
+  timer: 3000,
+  timerProgressBar: true,
+  showConfirmButton: false,
+});
+
 
 const UserRoleUpdateForm: React.FC = () => {
   const [formData, setFormData] = useState({ role: "", email: "" });
@@ -22,26 +64,50 @@ const UserRoleUpdateForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    // Add any additional validation logic if needed
+
+  async function handleSubmit() {
     try {
-      // Set loading to true to activate the LoadingButton spinner
-      setLoading(true);
+      setLoading(true)
+      let _users: User[] = [];
+      let usersQuery = query(userCollection,where("email","==",formData.email));
+      let usersSnapshot = await getDocs(usersQuery);
+      usersSnapshot.forEach((snap) => {
+        console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
+        let user = {
+          id: snap.id,
+          ...JSON.parse(JSON.stringify(snap.data())),
+        };
+        _users.push(user);
+      });
 
-      // Simulate an API call or any asynchronous task
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log({Users:_users})
+      if(_users.length < 1){
+        Toast.fire({
+          text:"Email does not exist",
+          icon:"warning"
+        })
 
-      // After the task is complete, reset loading state
-      setLoading(false);
+      }else{
+        let _user =_users[0]
+        let userDoc = doc(firestore,`users/${_user.id}`)
+         await updateDoc(userDoc,{role:formData.role})
+         Toast.fire({
+          text:`User role with email ${formData.email} is updated to ${formData.role}`,
+          icon:"success"
+        })
 
-      // Add any further actions after successful submission
-      console.log("Form submitted:", formData);
-    } catch (error) {
-      // Handle errors if needed
-      console.error("Error submitting form:", error);
-      setLoading(false); // Reset loading state on error
+      }
+      
+    } catch (err) {
+      console.log(err);
+      Toast.fire({
+        text:"Update failed. Check your internet connection",
+        icon:"warning"
+      })
+    }finally{
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Container maxWidth="sm" style={{ marginTop: "40px" }}>
@@ -75,6 +141,8 @@ const UserRoleUpdateForm: React.FC = () => {
         color="primary"
         fullWidth
         onClick={handleSubmit}
+        size="small"
+        disabled={loading}
         loading={loading}
         style={{ marginTop: "20px" }}
       >

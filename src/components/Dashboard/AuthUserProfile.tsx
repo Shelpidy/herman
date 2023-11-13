@@ -22,6 +22,8 @@ import { doc, getFirestore, getDoc, updateDoc } from "firebase/firestore";
 
 import { initializeApp } from "firebase/app";
 import uploadFileToFirebase from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../../hooks/customHooks";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -51,7 +53,7 @@ const AuthUserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [loading, setLoading] = useState(false);
-  const userId = "5cE02CfN6wWbtqksPGM5";
+
 
   const [updateUser, setUpdateUser] = useState<{
     id: string;
@@ -76,14 +78,26 @@ const AuthUserProfile = () => {
     dateOfBirth: new Date(),
     profileImage: "",
   });
+  const navigate = useNavigate()
+  const _currentUser = useCurrentUser()
+  const [currentUser,setCurrentUser] = useState<CurrentUser | null>(null)
+
+
+  useEffect(()=>{
+    setCurrentUser(_currentUser)
+    // console.log({CurrentUser:_currentUser})
+  },[_currentUser])
 
   useEffect(() => {
     getUser();
-  }, [userId]);
+  }, [currentUser]);
 
   async function getUser() {
+    if(!currentUser){
+      return
+    }
     try {
-      let userDoc = doc(firestore, `users/${userId}`);
+      let userDoc = doc(firestore, `users/${currentUser.id}`);
       let snap = await getDoc(userDoc);
       console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
       let _user = { id: snap.id, ...JSON.parse(JSON.stringify(snap.data())) };
@@ -125,7 +139,8 @@ const AuthUserProfile = () => {
     // Logic to update the appointment
     try {
       let userDoc = doc(firestore, `users/${userId}`);
-      await updateDoc(userDoc, { ...setUpdateUser });
+      let {id,...newUser} = updateUser
+      await updateDoc(userDoc, { ...newUser});
     } catch (error: any) {
       console.log(error.message);
       Toast.fire({
@@ -144,14 +159,21 @@ const AuthUserProfile = () => {
   const handleAvatarChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    if(!currentUser){
+      navigate("/signin")
+      return
+    }
     let files = event?.target?.files;
     if (!files) return;
-    let url = files[0] || "https://picsum.photos/200/200";
+    let url = URL.createObjectURL(files[0]);
+    let response = await fetch(url);
+    let blob = await response.blob()
     let imageUrl = await uploadFileToFirebase({
       folderName: "ProfileImage",
-      userId,
-      blob: url,
+      userId:currentUser.id as string,
+      blob,
     });
+
     setUpdateUser((prev) => ({ ...prev, profileImage: imageUrl }));
     setUserProfile((prev) => {
       if (prev) {
@@ -261,7 +283,7 @@ const AuthUserProfile = () => {
               label="Middle Name"
               sx={{ marginLeft: 2, marginTop: 1 }}
               size="small"
-              value={updateUser.firstName}
+              value={updateUser.middleName}
               onChange={(e) =>
                 setUpdateUser({ ...updateUser, middleName: e.target.value })
               }

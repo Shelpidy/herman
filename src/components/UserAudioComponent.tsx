@@ -132,7 +132,7 @@ const AudioSection: React.FC = () => {
           }
         })}
       </Grid>
-      <Box>
+      <Box sx={{display:"flex",flexDirection:'row',justifyContent:"flex-end",marginY:"10px"}}>
         <Link href="/stories">more...</Link>
       </Box>
     </Container>

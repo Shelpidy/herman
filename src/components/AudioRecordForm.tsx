@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -25,6 +25,8 @@ import Swal from "sweetalert2";
 import { initializeApp } from "firebase/app";
 import uploadFileToFirebase from "../utils/utils";
 import { LoadingButton } from "@mui/lab";
+import { useCurrentUser } from "../hooks/customHooks";
+import { useNavigate } from "react-router-dom";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,61 +43,80 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-interface AdminUserTableProps {
-  users: User[];
-}
-
 const firestore = getFirestore();
 
-// const userDoc = doc(firestore,"users")
-const userCollection = collection(firestore, "users");
 const audioCollection = collection(firestore, "audios");
-let audioQuery = query(audioCollection);
+
 
 type AudioRecordFormProps = {
   onAddedAudio: () => void;
 };
 
-let userId = "5cE02CfN6wWbtqksPGM5";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "center",
+  timer: 3000,
+  timerProgressBar: true,
+  showConfirmButton: false,
+});
 
 const AudioRecordForm = ({ onAddedAudio }: AudioRecordFormProps) => {
-  const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate()
+  const _currentUser = useCurrentUser()
+  const [currentUser,setCurrentUser] = useState<CurrentUser | null>(null)
+
+  useEffect(()=>{
+    setCurrentUser(_currentUser)
+    console.log({CurrentUser:_currentUser})
+  },[_currentUser])
+
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const addAudioElement = async (blob: Blob) => {
+    if(!currentUser){
+       navigate("/signin")
+       return
+    }
     try {
+      setLoading(true);
       let _audioUrl = await uploadFileToFirebase({
         blob,
-        userId,
+        userId:currentUser.id as string,
         folderName: "Audio",
       });
-      setAudioData(blob);
-      // const url = URL.createObjectURL(blob);
+     
       console.log({ audioUrl: _audioUrl });
       handleSaveRecording(_audioUrl);
     } catch (err) {
       console.log(err);
+    }finally{
+      setLoading(false)
     }
   };
 
   const handleSaveRecording = async (url: string) => {
+    if(!currentUser){
+      navigate("/signin")
+      return
+   }
     try {
-      setLoading(true);
+   
       // Add logic to save the audio data and
       let audioObj = {
         title,
         url: url,
         numberOfLikes: 0,
-        userId,
-        createdAt: new Date(),
+        userId:currentUser.id as string,
+        createdAt:new Date(),
         recorder: {
-          id: userId,
+          id: currentUser?.id,
           fullName: "Mohamed Shelpidy Kamara",
           profileImage: "https://picsum.photos/200/200",
         },
