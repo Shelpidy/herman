@@ -1,38 +1,23 @@
-import DeleteIcon from "@mui/icons-material/Delete"; // Add this import
 import {
   Box,
-  Button,
   CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  InputAdornment,
   List,
   ListItem,
   ListItemText,
   Paper,
-  TextField,
   Typography,
 } from "@mui/material";
 // import {getFirestore } from "firebase/firestore";
-import React, { useState, useEffect } from "react";
-import ReactAudioPlayer from "react-audio-player";
-import AudioRecordForm from "./AudioRecordForm";
-import { Add, Close, Favorite, PlayArrow, Search } from "@mui/icons-material";
 import {
   collection,
-  doc,
-  getFirestore,
   getDocs,
-  setDoc,
+  getFirestore,
   query,
-  onSnapshot,
   where,
-  limit,
 } from "firebase/firestore";
-import Swal from "sweetalert2";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import ReactAudioPlayer from "react-audio-player";
 
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -49,12 +34,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
-// const userDoc = doc(firestore,"users")
-const userCollection = collection(firestore, "users");
 const audioCollection = collection(firestore, "audios");
 
 const AudiosList = ({ userId }: { userId: string }) => {

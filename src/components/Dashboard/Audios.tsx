@@ -1,4 +1,3 @@
-import DeleteIcon from "@mui/icons-material/Delete"; // Add this import
 import {
   Box,
   Button,
@@ -16,22 +15,18 @@ import {
   Typography,
 } from "@mui/material";
 // import {getFirestore } from "firebase/firestore";
-import React, { useState, useEffect } from "react";
-import ReactAudioPlayer from "react-audio-player";
-import AudioRecordForm from "../AudioRecordForm";
-import { Add, Close, PlayArrow, Search } from "@mui/icons-material";
+import { Add, Close, Search } from "@mui/icons-material";
 import {
   collection,
-  doc,
-  getFirestore,
   getDocs,
-  setDoc,
-  query,
+  getFirestore,
   onSnapshot,
-  where,
-  limit,
+  query,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import ReactAudioPlayer from "react-audio-player";
 import Swal from "sweetalert2";
+import AudioRecordForm from "../AudioRecordForm";
 
 import { initializeApp } from "firebase/app";
 import moment from "moment";
@@ -49,16 +44,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-interface AdminUserTableProps {
-  users: User[];
-}
+// interface AdminUserTableProps {
+//   users: User[];
+// }
 
 const firestore = getFirestore();
 
 // const userDoc = doc(firestore,"users")
-const userCollection = collection(firestore, "users");
+// const userCollection = collection(firestore, "users");
 const audioCollection = collection(firestore, "audios");
 let audioQuery = query(audioCollection);
 
@@ -79,7 +74,7 @@ const Audios = () => {
       try {
         let _audios: Audio[] = [];
         let audiosSnapshot = await getDocs(audioQuery);
-        let userDocs = audiosSnapshot.forEach((snap) => {
+        audiosSnapshot.forEach((snap) => {
           console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
           let audio = {
             id: snap.id,
@@ -95,10 +90,10 @@ const Audios = () => {
     getAudios();
   }, []);
 
-  const handleAudioClick = (url: string) => {
-    setCurrentAudio(url);
-    setOpenDialog(true);
-  };
+  // const handleAudioClick = (url: string) => {
+  //   setCurrentAudio(url);
+  //   setOpenDialog(true);
+  // };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);

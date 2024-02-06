@@ -36,9 +36,30 @@ declare type Audio = {
   id: string;
   title: string;
   url: string;
+  status: "draft" | "review" | "publish";
   recorder: { id: string; fullName: string; profileImage: string };
   numberOfLikes: number | string;
   userId: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+};
+
+declare type Audio2 = {
+  id: string;
+  title: string;
+  url: string;
+  iframe: string;
+  status: "draft" | "review" | "publish";
+  author: {
+    fullName: string;
+    address: string;
+    region: string;
+    phoneNumber: string;
+    gender: string;
+  };
+  numberOfLikes: number | string;
   createdAt: {
     seconds: number;
     nanoseconds: number;

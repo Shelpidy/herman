@@ -53,17 +53,17 @@ function ServicesSection() {
       title: "Audio Book",
       description: `Step into the realm of community well-being and disease prevention. Our Public Health Certificate equips you with the knowledge to assess health challenges, design effective interventions, and advocate for healthier societies. Dive into epidemiology, health policies, and health promotion strategies, positioning yourself as a force for positive change.`,
     },
-  ]
+  ];
 
   return (
     <Container maxWidth="lg" style={{ marginTop: "40px" }}>
       <Grid container spacing={2}>
-        {Services.map((item: ServiceProps, index: number) => {
+        {Services.map((item: ServiceProps, _: number) => {
           return (
             <Grid item key={item.id} xs={12} sm={12} md={6} lg={6}>
               <ServicesComponent {...item} />
             </Grid>
-          )
+          );
         })}
       </Grid>
     </Container>

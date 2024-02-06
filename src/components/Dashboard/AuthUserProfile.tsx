@@ -1,29 +1,25 @@
+import { Edit, PhotoCamera, SaveAlt } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
+  Avatar,
   Box,
   CircularProgress,
-  Grid,
-  Avatar,
-  Typography,
-  Paper,
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemText,
-  Button,
   TextField,
-  IconButton,
-  useTheme,
+  Typography,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { PhotoCamera, Edit, SaveAlt } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { doc, getFirestore, getDoc, updateDoc } from "firebase/firestore";
 
 import { initializeApp } from "firebase/app";
-import uploadFileToFirebase from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/customHooks";
+import uploadFileToFirebase from "../../utils/utils";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -38,22 +34,21 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
-interface UserProfileProps {
-  user: User;
-  onRefetch: () => void;
-}
+// interface UserProfileProps {
+//   user: User;
+//   onRefetch: () => void;
+// }
 
 const AuthUserProfile = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const [userProfile, setUserProfile] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedData, setEditedData] = useState({});
+  const [_, setEditedData] = useState({});
   const [loading, setLoading] = useState(false);
-
 
   const [updateUser, setUpdateUser] = useState<{
     id: string;
@@ -78,23 +73,22 @@ const AuthUserProfile = () => {
     dateOfBirth: new Date(),
     profileImage: "",
   });
-  const navigate = useNavigate()
-  const _currentUser = useCurrentUser()
-  const [currentUser,setCurrentUser] = useState<CurrentUser | null>(null)
+  const navigate = useNavigate();
+  const _currentUser = useCurrentUser();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-
-  useEffect(()=>{
-    setCurrentUser(_currentUser)
+  useEffect(() => {
+    setCurrentUser(_currentUser);
     // console.log({CurrentUser:_currentUser})
-  },[_currentUser])
+  }, [_currentUser]);
 
   useEffect(() => {
     getUser();
   }, [currentUser]);
 
   async function getUser() {
-    if(!currentUser){
-      return
+    if (!currentUser) {
+      return;
     }
     try {
       let userDoc = doc(firestore, `users/${currentUser.id}`);
@@ -139,8 +133,8 @@ const AuthUserProfile = () => {
     // Logic to update the appointment
     try {
       let userDoc = doc(firestore, `users/${userId}`);
-      let {id,...newUser} = updateUser
-      await updateDoc(userDoc, { ...newUser});
+      let { id, ...newUser } = updateUser;
+      await updateDoc(userDoc, { ...newUser });
     } catch (error: any) {
       console.log(error.message);
       Toast.fire({
@@ -159,18 +153,18 @@ const AuthUserProfile = () => {
   const handleAvatarChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if(!currentUser){
-      navigate("/signin")
-      return
+    if (!currentUser) {
+      navigate("/signin");
+      return;
     }
     let files = event?.target?.files;
     if (!files) return;
     let url = URL.createObjectURL(files[0]);
     let response = await fetch(url);
-    let blob = await response.blob()
+    let blob = await response.blob();
     let imageUrl = await uploadFileToFirebase({
       folderName: "ProfileImage",
-      userId:currentUser.id as string,
+      userId: currentUser.id as string,
       blob,
     });
 

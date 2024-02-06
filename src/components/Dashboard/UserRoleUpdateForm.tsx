@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 import {
-  Button,
   Container,
   FormControl,
   InputLabel,
@@ -9,25 +8,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import Swal from "sweetalert2";
+import { initializeApp } from "firebase/app";
 import {
   collection,
   doc,
-  getFirestore,
   getDocs,
-  setDoc,
+  getFirestore,
   query,
-  onSnapshot,
-  where,
-  limit,
-  addDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import { useNavigate } from "react-router-dom";
-import { AddAPhotoOutlined } from "@mui/icons-material";
-import { useCurrentUser } from "../../hooks/customHooks";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 const firebaseConfig = {
   apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
   authDomain: "herman-98ed4.firebaseapp.com",
@@ -38,11 +30,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
-const userCollection = collection(firestore,"users")
+const userCollection = collection(firestore, "users");
 
 const Toast = Swal.mixin({
   toast: true,
@@ -51,7 +43,6 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
   showConfirmButton: false,
 });
-
 
 const UserRoleUpdateForm: React.FC = () => {
   const [formData, setFormData] = useState({ role: "", email: "" });
@@ -64,12 +55,14 @@ const UserRoleUpdateForm: React.FC = () => {
     }));
   };
 
-
   async function handleSubmit() {
     try {
-      setLoading(true)
+      setLoading(true);
       let _users: User[] = [];
-      let usersQuery = query(userCollection,where("email","==",formData.email));
+      let usersQuery = query(
+        userCollection,
+        where("email", "==", formData.email),
+      );
       let usersSnapshot = await getDocs(usersQuery);
       usersSnapshot.forEach((snap) => {
         console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
@@ -80,32 +73,29 @@ const UserRoleUpdateForm: React.FC = () => {
         _users.push(user);
       });
 
-      console.log({Users:_users})
-      if(_users.length < 1){
+      console.log({ Users: _users });
+      if (_users.length < 1) {
         Toast.fire({
-          text:"Email does not exist",
-          icon:"warning"
-        })
-
-      }else{
-        let _user =_users[0]
-        let userDoc = doc(firestore,`users/${_user.id}`)
-         await updateDoc(userDoc,{role:formData.role})
-         Toast.fire({
-          text:`User role with email ${formData.email} is updated to ${formData.role}`,
-          icon:"success"
-        })
-
+          text: "Email does not exist",
+          icon: "warning",
+        });
+      } else {
+        let _user = _users[0];
+        let userDoc = doc(firestore, `users/${_user.id}`);
+        await updateDoc(userDoc, { role: formData.role });
+        Toast.fire({
+          text: `User role with email ${formData.email} is updated to ${formData.role}`,
+          icon: "success",
+        });
       }
-      
     } catch (err) {
       console.log(err);
       Toast.fire({
-        text:"Update failed. Check your internet connection",
-        icon:"warning"
-      })
-    }finally{
-      setLoading(false)
+        text: "Update failed. Check your internet connection",
+        icon: "warning",
+      });
+    } finally {
+      setLoading(false);
     }
   }
 

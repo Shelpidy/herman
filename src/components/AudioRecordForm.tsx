@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   CircularProgress,
   Container,
   TextField,
   Typography,
 } from "@mui/material";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { AudioRecorder } from "react-audio-voice-recorder";
-import {
-  collection,
-  doc,
-  getFirestore,
-  getDocs,
-  setDoc,
-  query,
-  onSnapshot,
-  where,
-  limit,
-  addDoc,
-} from "firebase/firestore";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 
 import { initializeApp } from "firebase/app";
-import uploadFileToFirebase from "../utils/utils";
-import { LoadingButton } from "@mui/lab";
-import { useCurrentUser } from "../hooks/customHooks";
 import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../hooks/customHooks";
+import uploadFileToFirebase from "../utils/utils";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,84 +28,81 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
 const audioCollection = collection(firestore, "audios");
 
-
 type AudioRecordFormProps = {
   onAddedAudio: () => void;
 };
 
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "center",
-  timer: 3000,
-  timerProgressBar: true,
-  showConfirmButton: false,
-});
+// const Toast = Swal.mixin({
+//   toast: true,
+//   position: "center",
+//   timer: 3000,
+//   timerProgressBar: true,
+//   showConfirmButton: false,
+// });
 
 const AudioRecordForm = ({ onAddedAudio }: AudioRecordFormProps) => {
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate()
-  const _currentUser = useCurrentUser()
-  const [currentUser,setCurrentUser] = useState<CurrentUser | null>(null)
+  const navigate = useNavigate();
+  const _currentUser = useCurrentUser();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-  useEffect(()=>{
-    setCurrentUser(_currentUser)
-    console.log({CurrentUser:_currentUser})
-  },[_currentUser])
-
+  useEffect(() => {
+    setCurrentUser(_currentUser);
+    console.log({ CurrentUser: _currentUser });
+  }, [_currentUser]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const addAudioElement = async (blob: Blob) => {
-    if(!currentUser){
-       navigate("/signin")
-       return
+    if (!currentUser) {
+      navigate("/signin");
+      return;
     }
     try {
       setLoading(true);
       let _audioUrl = await uploadFileToFirebase({
         blob,
-        userId:currentUser.id as string,
+        userId: currentUser.id as string,
         folderName: "Audio",
       });
-     
+
       console.log({ audioUrl: _audioUrl });
       handleSaveRecording(_audioUrl);
     } catch (err) {
       console.log(err);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSaveRecording = async (url: string) => {
-    if(!currentUser){
-      navigate("/signin")
-      return
-   }
+    if (!currentUser) {
+      navigate("/signin");
+      return;
+    }
     try {
-   
       // Add logic to save the audio data and
       let audioObj = {
         title,
         url: url,
         numberOfLikes: 0,
-        userId:currentUser.id as string,
-        createdAt:new Date(),
+        status: "draft",
+        userId: currentUser.id as string,
+        createdAt: new Date(),
         recorder: {
           id: currentUser?.id,
-          fullName: "Mohamed Shelpidy Kamara",
-          profileImage: "https://picsum.photos/200/200",
+          fullName: currentUser.fullName,
+          profileImage: currentUser.profileImage,
         },
       };
       let snapShot = await addDoc(audioCollection, audioObj);

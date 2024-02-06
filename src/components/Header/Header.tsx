@@ -27,23 +27,22 @@ type HeaderProps = {
 function Header({ setThemeMode }: HeaderProps) {
   const [activeTab, setActiveTab] = React.useState<number>(0);
   const theme = useTheme();
-  const _currentUser = useCurrentUser()
-  const [currentUser,setCurrentUser] = useState<CurrentUser | null>(null)
+  const _currentUser = useCurrentUser();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const lessThanTab = useMediaQuery(theme.breakpoints.down("md"));
-  const [cookie,setCookie,removeCookie] = useCookies(["token"])
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
   // const navigate = useNavigate()
 
-  const handleSignout = ()=>{
-    removeCookie("token")
+  const handleSignout = () => {
+    removeCookie("token");
     // navigate("/")
-    window.location.reload()
+    window.location.reload();
+  };
 
-  }
-
-  useEffect(()=>{
-    setCurrentUser(_currentUser)
+  useEffect(() => {
+    setCurrentUser(_currentUser);
     // console.log({CurrentUser:_currentUser})
-  },[_currentUser])
+  }, [_currentUser]);
 
   return (
     <AppBar
@@ -97,7 +96,17 @@ function Header({ setThemeMode }: HeaderProps) {
             }}
           >
             {currentUser && (
-              <Button variant="outlined" sx={{color:theme.palette.primary.light,textTransform:"none",fontFamily:"Poppins-Medium"}} onClick={handleSignout}>Signout</Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  color: theme.palette.primary.light,
+                  textTransform: "none",
+                  fontFamily: "Poppins-Medium",
+                }}
+                onClick={handleSignout}
+              >
+                Signout
+              </Button>
             )}
             {!currentUser && (
               <Link
@@ -135,7 +144,7 @@ function Header({ setThemeMode }: HeaderProps) {
               </Link>
             )}
 
-          {currentUser && currentUser.role === "user" && (
+            {currentUser && currentUser.role === "user" && (
               <Link
                 style={{ textDecoration: "none" }}
                 className=" px-10 py-2 rounded hover:text-gray-300"

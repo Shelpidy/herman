@@ -1,10 +1,10 @@
-import { Typography, Divider, useTheme, useMediaQuery } from "@mui/material";
+import { Typography, useTheme, useMediaQuery } from "@mui/material";
 import AboutUs from "../components/AboutUs/AboutUs";
 import ContactUs from "../components/ContactUs/ContactUs";
 import SappChat from "../components/SappLiveChat/SappChat";
 import Banner from "../components/Banner/Banner";
 import ServicesSection from "../components/Services/Services";
-import AudioSection from "../components/UserAudioComponent";
+// import AudioSection from "../components/UserAudioComponent";
 
 function HomePage() {
   const theme = useTheme();
@@ -35,7 +35,7 @@ function HomePage() {
         <ServicesSection />
       </section>
 
-      <section data-aos="fade-in" id="courses" className="my-8 px-4">
+      {/* <section data-aos="fade-in" id="courses" className="my-8 px-4">
         <Typography
           className="text-center pb-2"
           fontFamily="Inter"
@@ -46,7 +46,7 @@ function HomePage() {
           Audio Stories
         </Typography>
         <AudioSection />
-      </section>
+      </section> */}
 
       <section data-aos="fade-out" id="gallery" className="my-4 px-4">
         <Typography

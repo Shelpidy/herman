@@ -1,44 +1,30 @@
-import React, { useState } from "react";
 import {
-  Button,
-  Container,
-  TextField,
-  FormControlLabel,
   Box,
+  Card,
+  CardMedia,
+  Container,
+  FormControl,
+  FormControlLabel,
   Grid,
-  Typography,
+  IconButton,
+  InputLabel,
+  Link,
+  MenuItem,
   Radio,
   RadioGroup,
-  Divider,
-  Card,
-  useTheme,
-  Link,
   Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  IconButton,
-  CardMedia,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
 
-import Swal from "sweetalert2";
-import { LoadingButton } from "@mui/lab";
-import {
-  collection,
-  doc,
-  getFirestore,
-  getDocs,
-  setDoc,
-  query,
-  onSnapshot,
-  where,
-  limit,
-  addDoc,
-} from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import uploadFileToFirebase from "../utils/utils";
-import { useNavigate } from "react-router-dom";
 import { AddAPhotoOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { initializeApp } from "firebase/app";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import uploadFileToFirebase from "../utils/utils";
 const firebaseConfig = {
   apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
   authDomain: "herman-98ed4.firebaseapp.com",
@@ -49,7 +35,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
@@ -84,13 +70,13 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [image, setImage] = useState<string | null>(null);
 
-  const theme = useTheme();
+  // const theme = useTheme();
   const navigate = useNavigate();
 
-  const { ...dataWithoutRole } = formData;
-  const isSubmitButtonDisabled = Object.values(dataWithoutRole).some(
-    (value) => value === "" || value === null,
-  );
+  // const { ...dataWithoutRole } = formData;
+  // const isSubmitButtonDisabled = Object.values(dataWithoutRole).some(
+  //   (value) => value === "" || value === null,
+  // );
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -133,7 +119,7 @@ const SignUpPage = () => {
         ...userData,
         profileImage: profileImage,
         dateOfBirth: new Date(formData.dateOfBirth),
-        role:"user"
+        role: "user",
       };
       console.log({ userObj });
       let snapShot = await addDoc(userCollection, userObj);
@@ -221,13 +207,12 @@ const SignUpPage = () => {
         justifyContent: "center",
         alignItems: "center",
         marginTop: "14vh",
-        flexDirection:"row",
+        flexDirection: "row",
         marginBottom: "5vh",
       }}
     >
-      
       <Card sx={{ padding: "25px", maxWidth: "800px", marginBottom: "15px" }}>
-         <Box
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -235,14 +220,15 @@ const SignUpPage = () => {
           }}
           // mb="10px"
         >
-          <Typography m='15px' variant="h6" fontFamily="Poppins-Light">Signup</Typography>
+          <Typography m="15px" variant="h6" fontFamily="Poppins-Light">
+            Signup
+          </Typography>
         </Box>
         <Card
           className="hide-scrollbar"
           variant="outlined"
           sx={{ width: "100%" }}
         >
-       
           <Box>
             {image && (
               <Box
@@ -291,14 +277,7 @@ const SignUpPage = () => {
             </label>
           </Box>
         </Card>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          mb="10px"
-        ></Box>
+
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <TextField

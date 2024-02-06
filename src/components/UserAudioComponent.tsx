@@ -1,45 +1,31 @@
-import React, { useEffect, useState } from "react";
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
+  CircularProgress,
+  Container,
+  Grid,
   IconButton,
   Link,
   Typography,
-  Grid,
-  Container,
-  CircularProgress,
-  Box,
-  Button,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { useNavigate } from "react-router-dom";
-import ReactAudioPlayer from "react-audio-player";
 import {
   collection,
   doc,
-  getFirestore,
-  getDocs,
-  setDoc,
-  query,
-  onSnapshot,
-  where,
-  limit,
-  updateDoc,
   getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  updateDoc,
 } from "firebase/firestore";
-import Swal from "sweetalert2";
 import moment from "moment";
+import React, { useEffect, useState } from "react";
+import ReactAudioPlayer from "react-audio-player";
+import { useNavigate } from "react-router-dom";
 
+import { Favorite, LinkRounded } from "@mui/icons-material";
 import { initializeApp } from "firebase/app";
-import {
-  Favorite,
-  LinkRounded,
-  LinkSharp,
-  OpenInBrowser,
-  OpenInFull,
-} from "@mui/icons-material";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -54,11 +40,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-interface AdminUserTableProps {
-  users: User[];
-}
+initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
@@ -124,6 +106,7 @@ const AudioSection: React.FC = () => {
                   numberOfLikes={audio.numberOfLikes}
                   createdAt={audio.createdAt}
                   userId={audio.userId}
+                  status="draft"
                 />
               </Grid>
             );
@@ -132,7 +115,14 @@ const AudioSection: React.FC = () => {
           }
         })}
       </Grid>
-      <Box sx={{display:"flex",flexDirection:'row',justifyContent:"flex-end",marginY:"10px"}}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          marginY: "10px",
+        }}
+      >
         <Link href="/stories">more...</Link>
       </Box>
     </Container>

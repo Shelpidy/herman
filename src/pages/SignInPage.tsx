@@ -45,7 +45,7 @@ const app = initializeApp(firebaseConfig);
 
 const firestore = getFirestore();
 
-const userCollection = collection(firestore,"users")
+const userCollection = collection(firestore, "users");
 
 const Toast = Swal.mixin({
   toast: true,
@@ -63,7 +63,7 @@ const SignInPage: React.FC = () => {
   const [cookie, setCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,61 +73,62 @@ const SignInPage: React.FC = () => {
     }));
   };
 
+  async function handleFormSubmit() {
+    try {
+      setLoading(true);
+      let _users: User[] = [];
+      let usersQuery = query(
+        userCollection,
+        where("email", "==", formData.email),
+      );
+      let usersSnapshot = await getDocs(usersQuery);
+      usersSnapshot.forEach((snap) => {
+        console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
+        let user = {
+          id: snap.id,
+          ...JSON.parse(JSON.stringify(snap.data())),
+        };
+        _users.push(user);
+      });
 
- async function handleFormSubmit() {
-      try {
-        setLoading(true)
-        let _users: User[] = [];
-        let usersQuery = query(userCollection,where("email","==",formData.email));
-        let usersSnapshot = await getDocs(usersQuery);
-        usersSnapshot.forEach((snap) => {
-          console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
-          let user = {
-            id: snap.id,
-            ...JSON.parse(JSON.stringify(snap.data())),
-          };
-          _users.push(user);
-        });
-
-        console.log({Users:_users})
-        if(_users.length < 1){
-          Toast.fire({
-            text:"Email does not exist",
-            icon:"warning"
-          })
-
-        }else{
-          let _user = _users[0]
-          if(_user.password === formData.password){
-            let data = {
-              id:_user.id,
-              fullName:_user.firstName +" "+ _user.middleName + " "+_user.lastName,
-              profileImage:_user.profileImage,
-              role:_user.role
-            }
-            let encodedData = jwt_encode(data,'herman')
-            console.log({token:encodedData})
-            setCookie("token", String(encodedData));
-            // navigate("/")
-            window.location.assign("/")
-          }else{
-            Toast.fire({
-              text:"Password in incorrect",
-              icon:"warning"
-            })
-          }
-        }
-        
-      } catch (err) {
-        console.log(err);
+      console.log({ Users: _users });
+      if (_users.length < 1) {
         Toast.fire({
-          text:"login fail. Check your internet connection",
-          icon:"warning"
-        })
-      }finally{
-        setLoading(false)
+          text: "Email does not exist",
+          icon: "warning",
+        });
+      } else {
+        let _user = _users[0];
+        if (_user.password === formData.password) {
+          let data = {
+            id: _user.id,
+            fullName:
+              _user.firstName + " " + _user.middleName + " " + _user.lastName,
+            profileImage: _user.profileImage,
+            role: _user.role,
+          };
+          let encodedData = jwt_encode(data, "herman");
+          console.log({ token: encodedData });
+          setCookie("token", String(encodedData));
+          // navigate("/")
+          window.location.assign("/");
+        } else {
+          Toast.fire({
+            text: "Password in incorrect",
+            icon: "warning",
+          });
+        }
       }
+    } catch (err) {
+      console.log(err);
+      Toast.fire({
+        text: "login fail. Check your internet connection",
+        icon: "warning",
+      });
+    } finally {
+      setLoading(false);
     }
+  }
 
   return (
     <Container
@@ -156,7 +157,9 @@ const SignInPage: React.FC = () => {
           }}
           // mb="10px"
         >
-          <Typography m='15px' variant="h6" fontFamily="Poppins-Light">Signin</Typography>
+          <Typography m="15px" variant="h6" fontFamily="Poppins-Light">
+            Signin
+          </Typography>
         </Box>
         <TextField
           size="small"

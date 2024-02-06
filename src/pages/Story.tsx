@@ -31,7 +31,7 @@ const audioQuery = query(audioCollection);
 
 const StoryPage: React.FC = () => {
   const [audios, setAudios] = useState<Audio[] | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     async function getAudios() {
@@ -60,7 +60,7 @@ const StoryPage: React.FC = () => {
 
   const filteredAudios = audios
     ? audios.filter((audio) =>
-        audio.title.toLowerCase().includes(searchTerm.toLowerCase())
+        audio.title.toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : null;
 
@@ -86,29 +86,35 @@ const StoryPage: React.FC = () => {
   }
 
   return (
-    <Container
-      maxWidth="lg"
-      style={{ marginTop: "13vh", marginBottom: "5vh" }}
-    >
-      <Box  sx={{marginY:'4vh',display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
-      <Typography fontFamily="Poppins-Medium" variant="h5">Audio Stories</Typography>
-      <TextField
-        label="Search"
-        variant="outlined"
-        size="small"
-  
-        value={searchTerm}
-        onChange={handleSearchChange}
-        InputProps={{
-          endAdornment: (
-            <IconButton onClick={() => setSearchTerm('')} edge="end">
-              <SearchIcon />
-            </IconButton>
-          ),
+    <Container maxWidth="lg" style={{ marginTop: "13vh", marginBottom: "5vh" }}>
+      <Box
+        sx={{
+          marginY: "4vh",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
-      />
+      >
+        <Typography fontFamily="Poppins-Medium" variant="h5">
+          Audio Stories
+        </Typography>
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          InputProps={{
+            endAdornment: (
+              <IconButton onClick={() => setSearchTerm("")} edge="end">
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
+        />
       </Box>
-      
+
       <Grid container spacing={2}>
         {filteredAudios.map((audio) => {
           if (audio.recorder) {
