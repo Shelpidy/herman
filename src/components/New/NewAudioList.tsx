@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   List,
   MenuItem,
   Pagination,
@@ -41,11 +42,13 @@ const AudioList = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [audios, setAudios] = useState<Audio2[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
   const itemsPerPage = 5;
 
   useEffect(() => {
     async function getAudios() {
       try {
+        setLoading(true)
         let _audios: Audio2[] = [];
         let audiosSnapshot = await getDocs(audioQuery);
         audiosSnapshot.forEach((snap) => {
@@ -59,6 +62,8 @@ const AudioList = () => {
         setAudios(_audios);
       } catch (err) {
         console.error(err);
+      }finally{
+        setLoading(false)
       }
     }
     getAudios();
@@ -89,6 +94,28 @@ const AudioList = () => {
   const handleChangePage = (event: React.ChangeEvent<any>) => {
     setPage(event.target.value);
   };
+
+  
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          height: "50vh",
+          minWidth: "100%",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "5px",
+        }}
+      >
+        <CircularProgress color="primary" size={25} />
+        <Typography variant="caption" sx={{color: "primary.main" }}>
+          LOADING...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <div>

@@ -1,22 +1,15 @@
 import {
-  Box,
-  CircularProgress,
-  Grid,
   Avatar,
-  Typography,
-  Paper,
+  Box,
   Divider,
   List,
   ListItem,
   ListItemText,
-  Button,
-  TextField,
-  IconButton,
-  useTheme,
+  Typography
 } from "@mui/material";
 
 const UserProfile = (user: User) => {
-  const theme = useTheme();
+  // const theme = useTheme();
   return (
     <Box
       sx={{

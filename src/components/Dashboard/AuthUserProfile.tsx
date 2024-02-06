@@ -182,7 +182,7 @@ const AuthUserProfile = () => {
     return (
       <Box
         sx={{
-          height: "95vh",
+          height: "50vh",
           minWidth: "100%",
           display: "flex",
           justifyContent: "center",
@@ -191,8 +191,8 @@ const AuthUserProfile = () => {
           gap: "5px",
         }}
       >
-        <CircularProgress color="primary" size={30} />
-        <Typography sx={{ fontWeight: "bold", color: "primary.main" }}>
+        <CircularProgress color="primary" size={25} />
+        <Typography variant="caption" sx={{color: "primary.main" }}>
           LOADING...
         </Typography>
       </Box>

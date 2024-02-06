@@ -101,13 +101,14 @@ const UserRoleUpdateForm: React.FC = () => {
 
   return (
     <Container maxWidth="sm" style={{ marginTop: "40px" }}>
-      <Typography variant="h5" gutterBottom>
+      <Typography gutterBottom>
         Update User Role
       </Typography>
 
       <FormControl fullWidth variant="outlined" margin="normal">
         <InputLabel>Role</InputLabel>
         <Select
+          size="small"
           label="Role"
           value={formData.role}
           onChange={(e) => handleInputChange("role", e.target.value as string)}
