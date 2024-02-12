@@ -101,9 +101,7 @@ const UserRoleUpdateForm: React.FC = () => {
 
   return (
     <Container maxWidth="sm" style={{ marginTop: "40px" }}>
-      <Typography gutterBottom>
-        Update User Role
-      </Typography>
+      <Typography gutterBottom>Update User Role</Typography>
 
       <FormControl fullWidth variant="outlined" margin="normal">
         <InputLabel>Role</InputLabel>

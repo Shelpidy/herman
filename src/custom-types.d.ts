@@ -51,7 +51,7 @@ declare type Audio2 = {
   title: string;
   url: string;
   iframe: string;
-  status: "draft" | "review" | "publish";
+  status: "draft" | "write" | "translate" | "read" | "publish" | "manage";
   author: {
     fullName: string;
     address: string;

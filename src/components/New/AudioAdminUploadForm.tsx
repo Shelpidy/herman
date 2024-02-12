@@ -23,6 +23,7 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import Swal from "sweetalert2";
 import uploadFileToFirebase from "../../utils/utils";
 import ReactAudioPlayer from "react-audio-player";
+import { AudioRecorder } from "react-audio-voice-recorder";
 const firebaseConfig = {
   apiKey: "AIzaSyA9EOaEqf4vO1VUDoxSDAZDjnIkadFUCVE",
   authDomain: "herman-98ed4.firebaseapp.com",
@@ -88,6 +89,16 @@ const AudioAdminUpload = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const addAudioElement = async (blob: Blob) => {
+    let audioFile = new File([blob], "audioURL");
+    let audioUrl = URL.createObjectURL(audioFile);
+    setFormData((prevData: any) => ({
+      ...prevData,
+      url: audioUrl,
+    }));
+    console.log({ Audio: audioUrl });
   };
 
   const handleAudioFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +178,7 @@ const AudioAdminUpload = () => {
     >
       <Card sx={{ padding: "25px", maxWidth: "800px", marginBottom: "15px" }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} sx={{ marginTop: 3 }}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <label
               style={{
                 display: "flex",
@@ -194,19 +205,37 @@ const AudioAdminUpload = () => {
                 Click here to upload audio
               </Typography>
             </label>
+          
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <Box className="flex flex-col items-center">
+            <Typography variant="caption" className="text-center my-3">Record Audio</Typography>
+            <AudioRecorder
+              onRecordingComplete={addAudioElement}
+              audioTrackConstraints={{
+                noiseSuppression: true,
+                echoCancellation: true,
+              }}
+              // downloadOnSavePress={false}
+              downloadFileExtension="webm"
+            />
+            </Box>
+          </Grid>
             {formData.url && (
+              <Grid item xs={12} sm={12} sx={{ marginTop: 2 }}>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  marginTop: 3,
+            
                 }}
               >
-                <ReactAudioPlayer src={formData.url} controls />
+                <ReactAudioPlayer style={{width:"60%"}} src={formData.url} controls />
               </Box>
+              </Grid>
             )}
-          </Grid>
+            
           <Grid item xs={12} sm={12} sx={{ marginTop: 3 }}>
             <TextField
               size="small"

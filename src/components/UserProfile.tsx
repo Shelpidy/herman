@@ -5,7 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography
+  Typography,
 } from "@mui/material";
 
 const UserProfile = (user: User) => {

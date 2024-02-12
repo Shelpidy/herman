@@ -37,7 +37,7 @@ let audioQuery = query(audioCollection);
 
 const AudioList = () => {
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "draft" | "review" | "publish"
+    "all" | "draft" | "write" | "translate" | "read" | "publish" | "manage"
   >("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [audios, setAudios] = useState<Audio2[]>([]);
@@ -45,27 +45,28 @@ const AudioList = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const itemsPerPage = 5;
 
-  useEffect(() => {
-    async function getAudios() {
-      try {
-        setLoading(true)
-        let _audios: Audio2[] = [];
-        let audiosSnapshot = await getDocs(audioQuery);
-        audiosSnapshot.forEach((snap) => {
-          console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
-          let audio = {
-            id: snap.id,
-            ...JSON.parse(JSON.stringify(snap.data())),
-          };
-          _audios.push(audio);
-        });
-        setAudios(_audios);
-      } catch (err) {
-        console.error(err);
-      }finally{
-        setLoading(false)
-      }
+  async function getAudios() {
+    try {
+      setLoading(true);
+      let _audios: Audio2[] = [];
+      let audiosSnapshot = await getDocs(audioQuery);
+      audiosSnapshot.forEach((snap) => {
+        console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
+        let audio = {
+          id: snap.id,
+          ...JSON.parse(JSON.stringify(snap.data())),
+        };
+        _audios.push(audio);
+      });
+      setAudios(_audios);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
+ 
     getAudios();
   }, []);
 
@@ -81,7 +82,14 @@ const AudioList = () => {
 
   const handleStatusFilterChange = (event: SelectChangeEvent<any>) => {
     setStatusFilter(
-      event.target.value as "all" | "draft" | "review" | "publish",
+      event.target.value as
+        | "all"
+        | "draft"
+        | "write"
+        | "translate"
+        | "read"
+        | "publish"
+        | "manage",
     );
     setPage(1); // Reset page when changing status filter
   };
@@ -91,11 +99,10 @@ const AudioList = () => {
     setPage(1); // Reset page when changing search query
   };
 
-  const handleChangePage = (event: React.ChangeEvent<any>) => {
-    setPage(event.target.value);
+  const handleChangePage = (_event: React.ChangeEvent<any>,page:number) => {
+    setPage(page);
   };
 
-  
   if (loading) {
     return (
       <Box
@@ -110,7 +117,7 @@ const AudioList = () => {
         }}
       >
         <CircularProgress color="primary" size={25} />
-        <Typography variant="caption" sx={{color: "primary.main" }}>
+        <Typography variant="caption" sx={{ color: "primary.main" }}>
           LOADING...
         </Typography>
       </Box>
@@ -151,8 +158,11 @@ const AudioList = () => {
           >
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="draft">Draft</MenuItem>
-            <MenuItem value="review">Review</MenuItem>
+            <MenuItem value="write">Write</MenuItem>
+            <MenuItem value="translate">Translate</MenuItem>
+            <MenuItem value="read">Read</MenuItem>
             <MenuItem value="publish">Publish</MenuItem>
+            <MenuItem value="manage">Manage</MenuItem>
           </Select>
         </Box>
       </Box>
@@ -161,7 +171,7 @@ const AudioList = () => {
         {filteredList
           .slice((page - 1) * itemsPerPage, page * itemsPerPage)
           .map((audio, _) => (
-            <AudioListItem key={audio.id} audio={audio} />
+            <AudioListItem refetch={()=> getAudios()} key={audio.id} audio={audio} />
           ))}
       </List>
 

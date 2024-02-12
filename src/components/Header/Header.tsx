@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Header.css";
 import {
   AppBar,
   Toolbar,
-  Tabs,
-  Tab,
-  Typography,
   useMediaQuery,
   useTheme,
   IconButton,
@@ -18,19 +15,17 @@ import { DarkMode, LightMode } from "@mui/icons-material";
 import NavMenuBar from "../NavMenuBar/NavMenuBar";
 import { useCurrentUser } from "../../hooks/customHooks";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   setThemeMode: () => void;
 };
 
 function Header({ setThemeMode }: HeaderProps) {
-  const [activeTab, setActiveTab] = React.useState<number>(0);
   const theme = useTheme();
   const _currentUser = useCurrentUser();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const lessThanTab = useMediaQuery(theme.breakpoints.down("md"));
-  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
+  const [_cookie, _setCookie, removeCookie] = useCookies(["token"]);
   // const navigate = useNavigate()
 
   const handleSignout = () => {
@@ -60,9 +55,17 @@ function Header({ setThemeMode }: HeaderProps) {
         }}
       >
         <Box>
-          <Typography variant="h6" fontWeight="blod">
-            Herman Story
-          </Typography>
+          <Link
+          color="primary.light"
+          style={{ textDecoration: "none" }}
+          className="px-5 py-2 rounded"
+          href="/"
+          >
+          <h1 className="font-extrabold text-xl">
+            HERMAN
+          </h1>
+          </Link>
+         
         </Box>
 
         {!lessThanTab && (

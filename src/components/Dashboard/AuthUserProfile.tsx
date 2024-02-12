@@ -79,7 +79,7 @@ const AuthUserProfile = () => {
 
   useEffect(() => {
     setCurrentUser(_currentUser);
-    // console.log({CurrentUser:_currentUser})
+    console.log({CurrentUser:_currentUser})
   }, [_currentUser]);
 
   useEffect(() => {
@@ -88,12 +88,14 @@ const AuthUserProfile = () => {
 
   async function getUser() {
     if (!currentUser) {
+      // console.log("No current user")
       return;
     }
     try {
+      console.log("Fetch user profile")
       let userDoc = doc(firestore, `users/${currentUser.id}`);
       let snap = await getDoc(userDoc);
-      console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
+      // console.log(`${snap.id} ${JSON.stringify(snap.data())}`);
       let _user = { id: snap.id, ...JSON.parse(JSON.stringify(snap.data())) };
       setUserProfile(_user);
     } catch (err) {
@@ -102,7 +104,7 @@ const AuthUserProfile = () => {
   }
 
   const handleEdit = (userprofile: User) => {
-    console.log(userprofile);
+    // console.log(userprofile);
     setIsEditing(true);
     // Initialize editedData with the current user data
     setEditedData(updateUser);
@@ -140,7 +142,7 @@ const AuthUserProfile = () => {
       Toast.fire({
         icon: "error",
         iconColor: "red",
-        text: "An error occurred while updating.",
+        text: "Couldn't update.",
       });
     } finally {
       setLoading(false);
@@ -192,7 +194,7 @@ const AuthUserProfile = () => {
         }}
       >
         <CircularProgress color="primary" size={25} />
-        <Typography variant="caption" sx={{color: "primary.main" }}>
+        <Typography variant="caption" sx={{ color: "primary.main" }}>
           LOADING...
         </Typography>
       </Box>
