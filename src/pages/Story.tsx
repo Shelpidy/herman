@@ -125,7 +125,7 @@ const StoryPage: React.FC = () => {
                   title={audio.title}
                   url={audio.url}
                   recorder={audio.recorder}
-                  numberOfLikes={audio.numberOfLikes}
+                  rank={audio.rank}
                   createdAt={audio.createdAt}
                   userId={audio.userId}
                 />

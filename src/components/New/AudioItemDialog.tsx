@@ -8,14 +8,15 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 
-import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc,getFirestore, updateDoc } from "firebase/firestore";
 import moment from "moment";
 import React, { useState } from "react";
-
-import { Favorite } from "@mui/icons-material";
 import { initializeApp } from "firebase/app";
 import Swal from "sweetalert2";
 import ReactAudioPlayer from "react-audio-player";
@@ -50,35 +51,40 @@ interface AudioListItemDialogProps {
   audio: Audio2;
   open: boolean;
   onClose: () => void;
-  onLikeChange: (likeCounts: number) => void;
+  onRank: (rank: number|string) => void;
 }
 
 const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
   audio,
   open,
   onClose,
-  onLikeChange,
+  onRank,
 }) => {
-  const { id, title, author, status, numberOfLikes, createdAt } = audio;
+  const { id, title, author, status, rank:_rank, createdAt } = audio;
 
-  const [likesCount, setLikesCount] = useState<number | string>(numberOfLikes);
+  const [rank, setRank] = useState<number | string>(_rank);
+  const [loading,setLoading] = useState<boolean>(false)
 
-  const handleLikeClick = async () => {
+  const handleRank = async(event: SelectChangeEvent<any>) => {
+    let newRank = event.target.value;
     try {
+     setLoading(true)
       let audioDoc = doc(firestore, `audios/${id}`);
-      let snap = await getDoc(audioDoc);
-      let audioData: Audio = JSON.parse(JSON.stringify(snap.data()));
-      console.log({ AudioData: audioData });
-      let newLikesCount = Number(audioData.numberOfLikes) + 1;
-      await updateDoc(audioDoc, { numberOfLikes: newLikesCount });
-      setLikesCount(newLikesCount);
-      onLikeChange(newLikesCount);
+      await updateDoc(audioDoc, { rank: newRank });
+      setRank(newRank);
+      onRank(newRank);
+      Toast.fire({
+        text: `Story ranked to ${newRank}`,
+        icon: "success",
+      });
     } catch (err) {
       Toast.fire({
         text: "Couldn't like. Try again",
         icon: "warning",
       });
       console.log(err);
+    }finally{
+        setLoading(false)
     }
   };
 
@@ -124,7 +130,7 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
               controls
             />
             <Box className="flex flex-col items-center">
-              <Typography variant="caption">Status</Typography>
+              <Typography variant="caption">{audio.type}</Typography>
               <AudioBadge status={status} />
             </Box>
           </Box>
@@ -151,11 +157,21 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
           <div
             style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
-            <IconButton onClick={handleLikeClick} aria-label="like">
-              <Favorite />
-            </IconButton>
+        <Select
+            disabled={loading}
+            value={status}
+            size="small"
+            onChange={handleRank}
+            sx={{ marginRight: 1 }}
+          >
+            <MenuItem value="1">1</MenuItem>
+            <MenuItem value="2">2</MenuItem>
+            <MenuItem value="3">3</MenuItem>
+            <MenuItem value="4">4</MenuItem>
+            <MenuItem value="5">5</MenuItem>
+          </Select>    
             <Typography variant="body2" color="textSecondary">
-              {likesCount} Likes
+              Rank {rank}
             </Typography>
             <Typography
               sx={{ marginX: 2 }}

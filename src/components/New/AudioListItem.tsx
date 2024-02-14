@@ -62,8 +62,8 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
   const [status, setStatus] = React.useState<
     "draft" | "write" | "translate" | "read" | "publish" | "manage"
   >(audio.status);
-  const [likesCount, setLikesCount] = React.useState<number>(
-    audio.numberOfLikes as number,
+  const [rank, setRank] = React.useState<number | string>(
+    audio.rank,
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingStatusChange, setLoadingStatusChange] =
@@ -139,7 +139,7 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
         onClose={() => setOpenDialog(false)}
         open={openDialog}
         audio={{ ...audio, status: status }}
-        onLikeChange={(count) => setLikesCount(count)}
+        onRank={(rank) => setRank(rank)}
       />
       <Box
         sx={{
@@ -151,7 +151,7 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
         }}
       >
         <Typography variant="subtitle1" color="textSecondary">
-          {likesCount} Likes
+          Rank {rank}
         </Typography>
         <Typography sx={{ marginX: 2 }} variant="caption" color="textSecondary">
           {moment(new Date(audio.createdAt.seconds * 1000)).calendar()}
@@ -174,6 +174,7 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
             <CircularProgress size={15} />
           </div>
         )}
+
         {!loadingStatusChange && (
           <Select
             disabled={loadingStatusChange}
@@ -190,7 +191,11 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
             <MenuItem value="manage">Manage</MenuItem>
           </Select>
         )}
+        <div className="flex flex-col items-center justify-center">
+          <Typography variant="caption">{audio.type}</Typography>
         <AudioBadge status={status} />
+        </div>
+      
       </Box>
 
       <LoadingButton

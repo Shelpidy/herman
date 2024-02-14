@@ -120,7 +120,7 @@ const AudiosList = ({ userId }: { userId: string }) => {
               }}
             >
               <Typography variant="subtitle1" color="textSecondary">
-                {audio.numberOfLikes} Likes
+                {audio.rank} Likes
               </Typography>
               <Typography
                 sx={{ marginX: 2 }}

@@ -44,7 +44,6 @@ const AudioList = () => {
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const itemsPerPage = 5;
-
   async function getAudios() {
     try {
       setLoading(true);
@@ -66,7 +65,6 @@ const AudioList = () => {
     }
   }
   useEffect(() => {
- 
     getAudios();
   }, []);
 
@@ -74,12 +72,17 @@ const AudioList = () => {
     return (
       (statusFilter === "all" || audio.status === statusFilter) &&
       (audio.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        audio.author.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
+        audio.author.fullName.toLowerCase().includes(searchQuery.toLowerCase())||
+        audio.author.phoneNumber.toString().includes(searchQuery.toString())||
+        audio.author.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        audio.author.region.toLowerCase().includes(searchQuery.toLowerCase())||
+        audio.author.gender.toLowerCase().includes(searchQuery.toLowerCase())||
+        (audio.type as string)?.toLowerCase().includes(searchQuery.toLowerCase()))
+        
     );
   });
 
   const pageCount = Math.ceil(filteredList.length / itemsPerPage);
-
   const handleStatusFilterChange = (event: SelectChangeEvent<any>) => {
     setStatusFilter(
       event.target.value as

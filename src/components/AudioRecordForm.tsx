@@ -95,7 +95,7 @@ const AudioRecordForm = ({ onAddedAudio }: AudioRecordFormProps) => {
       let audioObj = {
         title,
         url: url,
-        numberOfLikes: 0,
+        rank: 0,
         status: "draft",
         userId: currentUser.id as string,
         createdAt: new Date(),

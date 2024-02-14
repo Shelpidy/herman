@@ -58,7 +58,7 @@ declare type Audio2 = {
     phoneNumber: string;
     gender: string;
   };
-  numberOfLikes: number | string;
+  rank: number | string;
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -74,6 +74,7 @@ const AudioAdminUpload = () => {
     address: "",
     fullName: "",
     region: "",
+    type:"",
     gender: "",
     phoneNumber: "",
   });
@@ -84,7 +85,7 @@ const AudioAdminUpload = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    console.log(value);
+    // console.log(value);
     setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
@@ -98,7 +99,7 @@ const AudioAdminUpload = () => {
       ...prevData,
       url: audioUrl,
     }));
-    console.log({ Audio: audioUrl });
+    // console.log({ Audio: audioUrl });
   };
 
   const handleAudioFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +111,7 @@ const AudioAdminUpload = () => {
         url: audioUrl,
       }));
 
-      console.log({ Audio: audioUrl });
+      // console.log({ Audio: audioUrl });
     }
   };
 
@@ -138,7 +139,8 @@ const AudioAdminUpload = () => {
         title: formData.title,
         iframe: formData.iframe,
         status: "draft",
-        numberOfLikes: 0,
+        rank: 0,
+        type:formData.type,
         createdAt: new Date(),
       };
       console.log({ audioObj });
@@ -301,6 +303,24 @@ const AudioAdminUpload = () => {
                 <MenuItem value="Northern Region">Northern Region</MenuItem>
                 <MenuItem value="Southern Region">Southern Region</MenuItem>
                 <MenuItem value="Western Area">Western Area</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <FormControl fullWidth>
+              <InputLabel id="story-select-label">Story Type</InputLabel>
+              <Select
+                size="small"
+                labelId="type-select-label"
+                id="audio-type"
+                value={formData.type}
+                label="Story Type"
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, type: e.target.value }));
+                }}
+              >
+                <MenuItem value="summary">Summary</MenuItem>
+                <MenuItem value="full">Full</MenuItem>
               </Select>
             </FormControl>
           </Grid>

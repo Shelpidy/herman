@@ -82,7 +82,7 @@ const Audios = () => {
           };
           _audios.push(audio);
         });
-        setAudios(_audios);
+        setAudios(_audios);  
       } catch (err) {
         console.log(err);
       }
@@ -213,7 +213,7 @@ const Audios = () => {
               }}
             >
               <Typography variant="subtitle1" color="textSecondary">
-                {audio.numberOfLikes} Likes
+                {audio.rank} Likes
               </Typography>
               <Typography
                 sx={{ marginX: 2 }}

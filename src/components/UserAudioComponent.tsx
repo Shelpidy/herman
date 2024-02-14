@@ -103,7 +103,7 @@ const AudioSection: React.FC = () => {
                   title={audio.title}
                   url={audio.url}
                   recorder={audio.recorder}
-                  numberOfLikes={audio.numberOfLikes}
+                  rank={audio.rank}
                   createdAt={audio.createdAt}
                   userId={audio.userId}
                   status="draft"
@@ -136,11 +136,11 @@ export const UserAudio: React.FC<Audio> = ({
   title,
   url,
   recorder,
-  numberOfLikes,
+  rank,
   createdAt,
 }) => {
   const navigate = useNavigate();
-  const [likesCount, setLikesCount] = useState<number | string>(numberOfLikes);
+  const [likesCount, setLikesCount] = useState<number | string>(rank);
 
   const handleLikeClick = async () => {
     try {
@@ -148,8 +148,8 @@ export const UserAudio: React.FC<Audio> = ({
       let snap = await getDoc(audioDoc);
       let audioData: Audio = JSON.parse(JSON.stringify(snap.data()));
       console.log({ AudioData: audioData });
-      let newLikesCount = Number(audioData.numberOfLikes) + 1;
-      await updateDoc(audioDoc, { numberOfLikes: newLikesCount });
+      let newLikesCount = Number(audioData.rank) + 1;
+      await updateDoc(audioDoc, { rank: newLikesCount });
       setLikesCount(newLikesCount);
     } catch (err) {
       console.log(err);
