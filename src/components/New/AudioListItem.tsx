@@ -184,8 +184,8 @@ const AudioListItem: React.FC<AudioListItemProps> = ({ audio,refetch }) => {
             sx={{ marginRight: 1 }}
           >
             <MenuItem value="draft">Draft</MenuItem>
-            <MenuItem value="edit">Edit</MenuItem>
             <MenuItem value="write">Write</MenuItem>
+            <MenuItem value="edit">Edit</MenuItem>
             <MenuItem value="translate">Translate</MenuItem>
             <MenuItem value="read">Read</MenuItem>
             <MenuItem value="publish">Publish</MenuItem>
