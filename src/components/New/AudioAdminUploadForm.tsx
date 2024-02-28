@@ -74,6 +74,7 @@ const AudioAdminUpload = () => {
     address: "",
     fullName: "",
     region: "",
+    country:"Sierra Leone",
     type:"",
     gender: "",
     phoneNumber: "",
@@ -134,6 +135,7 @@ const AudioAdminUpload = () => {
           region: formData.region,
           phoneNumber: formData.phoneNumber,
           gender: formData.gender,
+          country:formData.country
         },
         url: audioUrl,
         title: formData.title,
@@ -238,7 +240,7 @@ const AudioAdminUpload = () => {
               </Grid>
             )}
             
-          <Grid item xs={12} sm={12} sx={{ marginTop: 3 }}>
+          <Grid item xs={6} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               size="small"
               required
@@ -249,7 +251,17 @@ const AudioAdminUpload = () => {
               onChange={handleInputChange}
             />
           </Grid>
-
+          <Grid item xs={6} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              size="small"
+              required
+              fullWidth
+              label="Country"
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+            />
+          </Grid>
           <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               required

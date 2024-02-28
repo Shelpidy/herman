@@ -142,6 +142,9 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
               <strong>Author:</strong> {author.fullName}
             </p>
             <p>
+              <strong>Country:</strong> {author.country}
+            </p>
+            <p>
               <strong>Address:</strong> {author.address}
             </p>
             <p>

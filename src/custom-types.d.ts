@@ -59,6 +59,7 @@ declare type Audio2 = {
     region: string;
     phoneNumber: string;
     gender: string;
+    country:string
   };
   rank: number | string;
   createdAt: {

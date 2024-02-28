@@ -8,6 +8,7 @@ interface AudioBadgeProps {
 const colors = {
   draft: "gray",
   write: "#4caf50",
+  edit: "#4cafa0",
   translate: "#1e90ff",
   read: "#ff4500",
   publish: "#8a2be2",

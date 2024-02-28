@@ -37,7 +37,7 @@ let audioQuery = query(audioCollection);
 
 const AudioList = () => {
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "draft" | "write" | "translate" | "read" | "publish" | "manage"
+    "all" | "draft"| "edit" | "write" | "translate" | "read" | "publish" | "manage"
   >("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [audios, setAudios] = useState<Audio2[]>([]);
@@ -77,6 +77,7 @@ const AudioList = () => {
         audio.author.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
         audio.author.region.toLowerCase().includes(searchQuery.toLowerCase())||
         audio.author.gender.toLowerCase().includes(searchQuery.toLowerCase())||
+        audio.author.country?.toLowerCase().includes(searchQuery.toLowerCase())||
         (audio.type as string)?.toLowerCase().includes(searchQuery.toLowerCase()))
         
     );
@@ -88,6 +89,7 @@ const AudioList = () => {
       event.target.value as
         | "all"
         | "draft"
+        | "edit"
         | "write"
         | "translate"
         | "read"
@@ -161,6 +163,7 @@ const AudioList = () => {
           >
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="draft">Draft</MenuItem>
+            <MenuItem value="edit">Edit</MenuItem>
             <MenuItem value="write">Write</MenuItem>
             <MenuItem value="translate">Translate</MenuItem>
             <MenuItem value="read">Read</MenuItem>
