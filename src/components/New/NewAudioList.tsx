@@ -37,7 +37,15 @@ let audioQuery = query(audioCollection);
 
 const AudioList = () => {
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "draft"| "edit" | "write" | "translate" | "read" | "publish" | "manage"
+    | "all"
+    | "draft"
+    | "edit"
+    | "write"
+    | "translate"
+    | "read"
+    | "final-edit"
+    | "publish"
+    | "manage"
   >("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [audios, setAudios] = useState<Audio2[]>([]);
@@ -71,15 +79,28 @@ const AudioList = () => {
   const filteredList = audios?.filter((audio) => {
     return (
       (statusFilter === "all" || audio.status === statusFilter) &&
-      (audio.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        audio.author.fullName.toLowerCase().includes(searchQuery.toLowerCase())||
-        audio.author.phoneNumber.toString().includes(searchQuery.toString())||
-        audio.author.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        audio.author.region.toLowerCase().includes(searchQuery.toLowerCase())||
-        audio.author.gender.toLowerCase().includes(searchQuery.toLowerCase())||
-        audio.author.country?.toLowerCase().includes(searchQuery.toLowerCase())||
-        (audio.type as string)?.toLowerCase().includes(searchQuery.toLowerCase()))
-        
+      (audio?.title?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        audio?.author?.fullName
+          ?.toLowerCase()
+          ?.includes(searchQuery.toLowerCase()) ||
+        audio?.author?.phoneNumber.toString().includes(searchQuery.toString()) ||
+        audio?.author?.address
+          ?.toLowerCase()
+          ?.includes(searchQuery.toLowerCase()) ||
+        audio?.author?.region?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        audio?.author?.gender?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        audio?.author?.authorId
+          ?.includes(searchQuery) ||
+        audio?.audioId?.includes(searchQuery) ||
+        audio?.language?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        audio?.translateLanguage?.toLowerCase()
+          ?.includes(searchQuery?.toLowerCase()) ||
+        audio?.author?.country
+          ?.toLowerCase()
+          ?.includes(searchQuery?.toLowerCase()) ||
+        (audio.type as string)
+          ?.toLowerCase()
+          ?.includes(searchQuery.toLowerCase()))
     );
   });
 
@@ -93,6 +114,7 @@ const AudioList = () => {
         | "write"
         | "translate"
         | "read"
+        | "final-edit"
         | "publish"
         | "manage",
     );
@@ -104,7 +126,7 @@ const AudioList = () => {
     setPage(1); // Reset page when changing search query
   };
 
-  const handleChangePage = (_event: React.ChangeEvent<any>,page:number) => {
+  const handleChangePage = (_event: React.ChangeEvent<any>, page: number) => {
     setPage(page);
   };
 
@@ -167,6 +189,7 @@ const AudioList = () => {
             <MenuItem value="edit">Edit</MenuItem>
             <MenuItem value="translate">Translate</MenuItem>
             <MenuItem value="read">Read</MenuItem>
+            <MenuItem value="final-edit">Final Edit</MenuItem>
             <MenuItem value="publish">Publish</MenuItem>
             <MenuItem value="manage">Manage</MenuItem>
           </Select>
@@ -177,7 +200,11 @@ const AudioList = () => {
         {filteredList
           .slice((page - 1) * itemsPerPage, page * itemsPerPage)
           .map((audio, _) => (
-            <AudioListItem refetch={()=> getAudios()} key={audio.id} audio={audio} />
+            <AudioListItem
+              refetch={() => getAudios()}
+              key={audio.id}
+              audio={audio}
+            />
           ))}
       </List>
 

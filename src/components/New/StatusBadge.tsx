@@ -2,7 +2,15 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 
 interface AudioBadgeProps {
-  status: "draft" | "write" | "translate" | "read" | "publish" | "manage";
+  status:
+    | "draft"
+    | "write"
+    | "edit"
+    | "translate"
+    | "read"
+    | "final-edit"
+    | "publish"
+    | "manage";
 }
 
 const colors = {
@@ -11,6 +19,7 @@ const colors = {
   edit: "#4cafa0",
   translate: "#1e90ff",
   read: "#ff4500",
+  "final-edit": "#8cafa4",
   publish: "#8a2be2",
   manage: "#ff8c00",
 };

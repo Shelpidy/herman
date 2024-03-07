@@ -79,7 +79,7 @@ const AuthUserProfile = () => {
 
   useEffect(() => {
     setCurrentUser(_currentUser);
-    console.log({CurrentUser:_currentUser})
+    console.log({ CurrentUser: _currentUser });
   }, [_currentUser]);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const AuthUserProfile = () => {
       return;
     }
     try {
-      console.log("Fetch user profile")
+      console.log("Fetch user profile");
       let userDoc = doc(firestore, `users/${currentUser.id}`);
       let snap = await getDoc(userDoc);
       // console.log(`${snap.id} ${JSON.stringify(snap.data())}`);

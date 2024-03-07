@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { doc,getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import moment from "moment";
 import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
@@ -51,7 +51,7 @@ interface AudioListItemDialogProps {
   audio: Audio2;
   open: boolean;
   onClose: () => void;
-  onRank: (rank: number|string) => void;
+  onRank: (rank: number | string) => void;
 }
 
 const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
@@ -60,15 +60,26 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
   onClose,
   onRank,
 }) => {
-  const { id, title, author, status, rank:_rank, createdAt } = audio;
+  const {
+    id,
+    audioId,
+    publishedAt,
+    title,
+    author,
+    language,
+    translateLanguage,
+    status,
+    rank: _rank,
+    createdAt,
+  } = audio;
 
   const [rank, setRank] = useState<number | string>(_rank);
-  const [loading,setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleRank = async(event: SelectChangeEvent<any>) => {
+  const handleRank = async (event: SelectChangeEvent<any>) => {
     let newRank = event.target.value;
     try {
-     setLoading(true)
+      setLoading(true);
       let audioDoc = doc(firestore, `audios/${id}`);
       await updateDoc(audioDoc, { rank: newRank });
       setRank(newRank);
@@ -83,8 +94,8 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
         icon: "warning",
       });
       console.log(err);
-    }finally{
-        setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,7 +150,35 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
               {title}
             </h2>
             <p>
-              <strong>Author:</strong> {author.fullName}
+              <strong>Story ID:</strong> {audioId}
+            </p>
+            {
+              language &&
+              <p>
+              <strong>Recorded Language:</strong> {language}
+            </p>
+            }
+         
+            {translateLanguage && (
+              <p>
+                <strong>Translated Language:</strong> {translateLanguage}
+              </p>
+            )}
+            <p>
+              <strong>Date In:</strong>{" "}
+              {moment(new Date(createdAt.seconds * 1000)).calendar()}
+            </p>
+            {status === "manage" && publishedAt && (
+              <p>
+                <strong>Date Out:</strong>{" "}
+                {moment(new Date(publishedAt?.seconds * 1000)).calendar()}
+              </p>
+            )}
+            <p>
+              <strong>Story Teller Name:</strong> {author.fullName}
+            </p>
+            <p>
+              <strong>Story Teller ID:</strong> {author.authorId}
             </p>
             <p>
               <strong>Country:</strong> {author.country}
@@ -160,19 +199,19 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
           <div
             style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
-        <Select
-            disabled={loading}
-            value={status}
-            size="small"
-            onChange={handleRank}
-            sx={{ marginRight: 1 }}
-          >
-            <MenuItem value="1">1</MenuItem>
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="3">3</MenuItem>
-            <MenuItem value="4">4</MenuItem>
-            <MenuItem value="5">5</MenuItem>
-          </Select>    
+            <Select
+              disabled={loading}
+              value={status}
+              size="small"
+              onChange={handleRank}
+              sx={{ marginRight: 1 }}
+            >
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+            </Select>
             <Typography variant="body2" color="textSecondary">
               Rank {rank}
             </Typography>

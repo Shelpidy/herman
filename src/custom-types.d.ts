@@ -48,21 +48,37 @@ declare type Audio = {
 
 declare type Audio2 = {
   id: string;
+  audioId: string;
   title: string;
+  language: string;
+  translateLanguage: string;
   url: string;
   iframe: string;
-  type:"summary"|"full"
-  status: "draft" | "write" | "translate" | "read" | "publish" | "manage";
+  type: "summary" | "full";
+  status:
+    | "draft"
+    | "write"
+    | "edit"
+    | "translate"
+    | "read"
+    | "final-edit"
+    | "publish"
+    | "manage";
   author: {
+    authorId: string;
     fullName: string;
     address: string;
     region: string;
     phoneNumber: string;
     gender: string;
-    country:string
+    country: string;
   };
   rank: number | string;
   createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  publishedAt: null | {
     seconds: number;
     nanoseconds: number;
   };

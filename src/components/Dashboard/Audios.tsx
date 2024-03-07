@@ -82,7 +82,7 @@ const Audios = () => {
           };
           _audios.push(audio);
         });
-        setAudios(_audios);  
+        setAudios(_audios);
       } catch (err) {
         console.log(err);
       }

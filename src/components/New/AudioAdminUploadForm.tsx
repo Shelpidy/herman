@@ -47,11 +47,13 @@ const Toast = Swal.mixin({
 });
 declare type Audio2 = {
   id: string;
+  audioId: string;
   title: string;
   url: string;
   iframe: string;
   status: "draft" | "review" | "publish";
   author: {
+    authorId: string;
     fullName: string;
     address: string;
     region: string;
@@ -69,13 +71,15 @@ const AudioAdminUpload = () => {
   const [formData, setFormData] = useState({
     title: "Untitled",
     url: "",
+    language: "",
     iframe: "",
     status: "draft",
     address: "",
+    authorId: "",
     fullName: "",
     region: "",
-    country:"Sierra Leone",
-    type:"",
+    country: "Sierra Leone",
+    type: "",
     gender: "",
     phoneNumber: "",
   });
@@ -111,10 +115,19 @@ const AudioAdminUpload = () => {
         ...prevData,
         url: audioUrl,
       }));
-
       // console.log({ Audio: audioUrl });
     }
   };
+
+  function generateAudioId(): string {
+    const timestamp = new Date().getTime();
+    const randomChars = Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
+    const audioId = `A${timestamp}${randomChars}`;
+    return audioId;
+  }
 
   async function handleFormSubmit(): Promise<void> {
     setLoading(true);
@@ -128,21 +141,25 @@ const AudioAdminUpload = () => {
         userId: String(Date.now()),
       });
 
+      let audioId = generateAudioId();
       let audioObj = {
         author: {
+          authorId: formData.authorId,
           fullName: formData.fullName,
           address: formData.address,
           region: formData.region,
           phoneNumber: formData.phoneNumber,
           gender: formData.gender,
-          country:formData.country
+          country: formData.country,
         },
+        language: formData.language,
+        audioId: audioId,
         url: audioUrl,
         title: formData.title,
         iframe: formData.iframe,
         status: "draft",
         rank: 0,
-        type:formData.type,
+        type: formData.type,
         createdAt: new Date(),
       };
       console.log({ audioObj });
@@ -209,37 +226,42 @@ const AudioAdminUpload = () => {
                 Click here to upload audio
               </Typography>
             </label>
-          
           </Grid>
+
           <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <Box className="flex flex-col items-center">
-            <Typography variant="caption" className="text-center my-3">Record Audio</Typography>
-            <AudioRecorder
-              onRecordingComplete={addAudioElement}
-              audioTrackConstraints={{
-                noiseSuppression: true,
-                echoCancellation: true,
-              }}
-              // downloadOnSavePress={false}
-              downloadFileExtension="webm"
-            />
+              <Typography variant="caption" className="text-center my-3">
+                Record Audio
+              </Typography>
+              <AudioRecorder
+                onRecordingComplete={addAudioElement}
+                audioTrackConstraints={{
+                  noiseSuppression: true,
+                  echoCancellation: true,
+                }}
+                // downloadOnSavePress={false}
+                downloadFileExtension="webm"
+              />
             </Box>
           </Grid>
-            {formData.url && (
-              <Grid item xs={12} sm={12} sx={{ marginTop: 2 }}>
+          {formData.url && (
+            <Grid item xs={12} sm={12} sx={{ marginTop: 2 }}>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-            
                 }}
               >
-                <ReactAudioPlayer style={{width:"60%"}} src={formData.url} controls />
+                <ReactAudioPlayer
+                  style={{ width: "60%" }}
+                  src={formData.url}
+                  controls
+                />
               </Box>
-              </Grid>
-            )}
-            
+            </Grid>
+          )}
+
           <Grid item xs={6} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               size="small"
@@ -259,6 +281,28 @@ const AudioAdminUpload = () => {
               label="Country"
               name="country"
               value={formData.country}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={6} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              size="small"
+              required
+              fullWidth
+              label="Language"
+              name="language"
+              value={formData.language}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={6} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              size="small"
+              required
+              fullWidth
+              label="Author ID"
+              name="authorId"
+              value={formData.authorId}
               onChange={handleInputChange}
             />
           </Grid>

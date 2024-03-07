@@ -56,16 +56,13 @@ function Header({ setThemeMode }: HeaderProps) {
       >
         <Box>
           <Link
-          color="primary.light"
-          style={{ textDecoration: "none" }}
-          className="px-5 py-2 rounded"
-          href="/"
+            color="primary.light"
+            style={{ textDecoration: "none" }}
+            className="px-5 py-2 rounded"
+            href="/"
           >
-          <h1 className="font-extrabold text-xl">
-            HERMAN
-          </h1>
+            <h1 className="font-extrabold text-xl">HERMAN</h1>
           </Link>
-         
         </Box>
 
         {!lessThanTab && (
