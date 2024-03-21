@@ -82,6 +82,12 @@ const AudioAdminUpload = () => {
     type: "",
     gender: "",
     phoneNumber: "",
+    fId:"",
+    fName:"",
+    fCountry:"",
+    fAddress:"",
+    fPhonenumber:"",
+    fRegion:""
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -151,6 +157,15 @@ const AudioAdminUpload = () => {
           phoneNumber: formData.phoneNumber,
           gender: formData.gender,
           country: formData.country,
+        
+        },
+        felicitator:{
+          felicitatorId:formData.fId,
+          fullname:formData.fName,
+          phoneNumber:formData.fPhonenumber,
+          address:formData.fAddress,
+          region:formData.fRegion,
+          country:formData.fCountry
         },
         language: formData.language,
         audioId: audioId,
@@ -162,7 +177,7 @@ const AudioAdminUpload = () => {
         type: formData.type,
         createdAt: new Date(),
       };
-      console.log({ audioObj });
+      // console.log({ audioObj });
       let snapShot = await addDoc(audioCollection, audioObj);
       if (snapShot.path) {
         Toast.fire({
@@ -397,6 +412,112 @@ const AudioAdminUpload = () => {
                 label="Female"
               />
             </RadioGroup>
+          </Grid>
+          <Grid item xs={12} sm={12} sx={{ marginTop: 3 }}>
+                  <Typography sx={{textAlign:"center"}} variant="body1">Felicitator Information (Optional)</Typography>
+          </Grid>
+          
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator ID"
+              name="fId"
+              value={formData.fId}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator Name"
+              name="fName"
+              value={formData.fName}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <FormControl fullWidth>
+              <InputLabel id="f-region-select-label">Select Region</InputLabel>
+              <Select
+                size="small"
+                labelId="f-region-select-label"
+                id="f-region-select"
+                value={formData.fRegion}
+                label="Select Region"
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, fRegion: e.target.value }));
+                }}
+              >
+                <MenuItem value="Eastern Region">Eastern Region</MenuItem>
+                <MenuItem value="Northern Region">Northern Region</MenuItem>
+                <MenuItem value="Southern Region">Southern Region</MenuItem>
+                <MenuItem value="Western Area">Western Area</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          {/* <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator Region"
+              name="fRegion"
+              value={formData.fRegion}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
+          </Grid> */}
+          
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator Address"
+              name="fAddress"
+              value={formData.fAddress}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator Country"
+              name="fCountry"
+              value={formData.fCountry}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Felicitator Phone Number"
+              name="fPhonenumber"
+              value={formData.fPhonenumber}
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
+            />
           </Grid>
         </Grid>
         <LoadingButton

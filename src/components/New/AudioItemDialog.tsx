@@ -71,6 +71,7 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
     status,
     rank: _rank,
     createdAt,
+    felicitator
   } = audio;
 
   const [rank, setRank] = useState<number | string>(_rank);
@@ -223,6 +224,18 @@ const AudioListItemDialog: React.FC<AudioListItemDialogProps> = ({
               {moment(new Date(createdAt.seconds * 1000)).calendar()}
             </Typography>
           </div>
+          {
+            felicitator && 
+            <Box  sx={{ display: "flex",flexDirection:"column", margin: "15px" }}>
+              <Typography variant="h6" sx={{marginTop:2,marginBottom:1}}>Felicitator</Typography>
+              <p><strong>Felicitator ID:</strong> {felicitator.felicitatorId}</p>
+              <p><strong>Fullname:</strong> {felicitator.fullname}</p>
+              <p><strong>Address:</strong> {felicitator.address}</p>
+              <p><strong>Phonenumber:</strong> {felicitator.phoneNumber}</p>
+              <p><strong>Region:</strong> {felicitator.region}</p>
+              <p><strong>Country:</strong> {felicitator.country}</p>
+            </Box>
+          }
         </Box>
       </DialogContent>
       <DialogActions>

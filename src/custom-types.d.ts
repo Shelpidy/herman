@@ -73,6 +73,14 @@ declare type Audio2 = {
     gender: string;
     country: string;
   };
+  felicitator?:{
+    felicitatorId:string;
+    fullname:string;
+    address:string;
+    phoneNumber:string;
+    region:string;
+    country:string
+  };
   rank: number | string;
   createdAt: {
     seconds: number;
